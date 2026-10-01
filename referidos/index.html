@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Recomendados · Black Studio</title>
+<meta name="description" content="Productos que recomiendo en Mercado Libre y Amazon.">
+<meta property="og:title" content="Recomendados · Black Studio">
+<meta property="og:description" content="Productos que recomiendo en Mercado Libre y Amazon.">
+<style>
+  :root{--bg:#07080f;--card:#11131f;--line:#23263a;--text:#e8e6f5;--muted:#9a98b0;--accent:#caa3ff;--ml:#ffe600;--amz:#ff9900}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:'Trebuchet MS',system-ui,sans-serif;line-height:1.5}
+  a{color:var(--accent)}
+  header{max-width:1000px;margin:0 auto;padding:48px 16px 16px;text-align:center}
+  h1{margin:0 0 8px;font-size:clamp(1.8rem,5vw,2.6rem)}
+  header p{margin:0;color:var(--muted)}
+  .filters{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:24px 0 0}
+  .filters button{background:var(--card);color:var(--text);border:1px solid var(--line);border-radius:999px;padding:8px 16px;font:inherit;cursor:pointer}
+  .filters button[aria-pressed="true"]{border-color:var(--accent);color:var(--accent)}
+  main{max-width:1000px;margin:0 auto;padding:16px;display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+  .card img{width:100%;aspect-ratio:1;object-fit:contain;background:#fff}
+  .body{padding:14px;display:flex;flex-direction:column;gap:6px;flex:1}
+  .tag{align-self:flex-start;font-size:.75rem;font-weight:bold;padding:2px 8px;border-radius:6px;color:#111}
+  .tag.ml{background:var(--ml)}
+  .tag.amz{background:var(--amz)}
+  .card h2{font-size:1.05rem;margin:0}
+  .card p{margin:0;color:var(--muted);font-size:.9rem;flex:1}
+  .btn{display:block;text-align:center;text-decoration:none;font-weight:bold;padding:10px;border-radius:10px;margin-top:8px;color:#111}
+  .btn.ml{background:var(--ml)}
+  .btn.amz{background:var(--amz)}
+  footer{max-width:1000px;margin:0 auto;padding:24px 16px 48px;color:var(--muted);font-size:.85rem;text-align:center}
+</style>
+</head>
+<body>
+<header>
+  <h1>🛒 Mis recomendados</h1>
+  <p>Productos que uso y recomiendo, disponibles en Chile.</p>
+  <div class="filters" role="group" aria-label="Filtrar por tienda">
+    <button data-f="all" aria-pressed="true">Todos</button>
+    <button data-f="ml" aria-pressed="false">Mercado Libre</button>
+    <button data-f="amz" aria-pressed="false">Amazon</button>
+  </div>
+</header>
+
+<main id="grid"></main>
+
+<footer>
+  <p>Algunos enlaces de esta página son enlaces de afiliado: si compras a través de ellos, puedo recibir una comisión sin costo extra para ti.<br>
+  Como Afiliado de Amazon, gano con las compras que califican.</p>
+  <p><a href="https://jonhblackrc1.github.io/">← Black Studio</a></p>
+</footer>
+
+<script>
+// ✏️ Edita esta lista para agregar o quitar productos.
+// tienda: "ml" (Mercado Libre) o "amz" (Amazon)
+// enlace: tu enlace de afiliado/referido
+// imagen: URL de la foto del producto (opcional)
+const productos = [
+  {
+    tienda: "ml",
+    nombre: "Producto de ejemplo 1",
+    descripcion: "Una frase corta de por qué lo recomiendas.",
+    enlace: "https://www.mercadolibre.cl/",
+    imagen: ""
+  },
+  {
+    tienda: "amz",
+    nombre: "Producto de ejemplo 2",
+    descripcion: "Una frase corta de por qué lo recomiendas.",
+    enlace: "https://www.amazon.com/",
+    imagen: ""
+  }
+];
+
+const TIENDAS = { ml: "Mercado Libre", amz: "Amazon" };
+const grid = document.getElementById("grid");
+
+function render(filtro) {
+  grid.innerHTML = "";
+  productos
+    .filter(p => filtro === "all" || p.tienda === filtro)
+    .forEach(p => {
+      const card = document.createElement("article");
+      card.className = "card";
+      if (p.imagen) {
+        const img = document.createElement("img");
+        img.src = p.imagen; img.alt = p.nombre; img.loading = "lazy";
+        card.append(img);
+      }
+      const body = document.createElement("div");
+      body.className = "body";
+      const tag = document.createElement("span");
+      tag.className = "tag " + p.tienda; tag.textContent = TIENDAS[p.tienda];
+      const h2 = document.createElement("h2"); h2.textContent = p.nombre;
+      const desc = document.createElement("p"); desc.textContent = p.descripcion;
+      const a = document.createElement("a");
+      a.className = "btn " + p.tienda; a.href = p.enlace;
+      a.target = "_blank"; a.rel = "sponsored noopener";
+      a.textContent = "Ver en " + TIENDAS[p.tienda] + " →";
+      body.append(tag, h2, desc, a);
+      card.append(body);
+      grid.append(card);
+    });
+}
+
+document.querySelectorAll(".filters button").forEach(b => b.addEventListener("click", () => {
+  document.querySelectorAll(".filters button").forEach(x => x.setAttribute("aria-pressed", x === b));
+  render(b.dataset.f);
+}));
+render("all");
+</script>
+</body>
+</html>
