@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="es-CL">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Calculadoras Útiles Chile</title>
+  <meta name="description" content="Calculadoras gratuitas para Chile: sueldo líquido, finiquito, conversor de UF, costo de envío, cuánto cobrar, IVA, boleta de honorarios, créditos y más.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="top">
+    <div class="wrap">
+      <h1>Calculadoras útiles 🇨🇱</h1>
+      <p class="sub">Herramientas rápidas para el día a día en Chile. Todo se calcula en tu navegador.</p>
+      <div class="indicadores" id="indicadores">
+        <span>UF: <b id="ind-uf">…</b></span>
+        <span>UTM: <b id="ind-utm">…</b></span>
+        <span>Dólar: <b id="ind-dolar">…</b></span>
+        <span>Euro: <b id="ind-euro">…</b></span>
+        <small id="ind-fuente"></small>
+      </div>
+    </div>
+  </header>
+
+  <nav class="tabs wrap" id="tabs" role="tablist"></nav>
+
+  <main class="wrap" id="panels">
+
+    <!-- 1. Sueldo líquido -->
+    <section class="panel" id="sueldo" data-title="💼 Sueldo líquido">
+      <h2>Sueldo líquido</h2>
+      <p class="hint">Calcula tu sueldo líquido a partir del bruto (trabajador dependiente).</p>
+      <form class="grid">
+        <label>Sueldo base bruto ($)<input type="number" name="base" value="1000000" min="0"></label>
+        <label>Gratificación
+          <select name="grat">
+            <option value="legal">Legal (25% con tope 4,75 IMM/12)</option>
+            <option value="no">No incluye</option>
+          </select>
+        </label>
+        <label>Otros haberes imponibles ($)<input type="number" name="otrosImp" value="0" min="0"></label>
+        <label>Haberes no imponibles ($)<small>colación, movilización</small><input type="number" name="noImp" value="0" min="0"></label>
+        <label>AFP
+          <select name="afp">
+            <option value="0.46">Uno (0,46%)</option>
+            <option value="0.58">Modelo (0,58%)</option>
+            <option value="1.16">PlanVital (1,16%)</option>
+            <option value="1.27" selected>Habitat (1,27%)</option>
+            <option value="1.44">Capital (1,44%)</option>
+            <option value="1.44">Cuprum (1,44%)</option>
+            <option value="1.45">ProVida (1,45%)</option>
+          </select>
+        </label>
+        <label>Salud
+          <select name="salud">
+            <option value="fonasa">Fonasa (7%)</option>
+            <option value="isapre">Isapre (plan en UF)</option>
+          </select>
+        </label>
+        <label class="isapre-only">Plan Isapre (UF)<input type="number" name="planUF" value="3" step="0.01" min="0"></label>
+        <label>Tipo de contrato
+          <select name="contrato">
+            <option value="indef">Indefinido (cesantía 0,6%)</option>
+            <option value="fijo">Plazo fijo (cesantía 0%)</option>
+          </select>
+        </label>
+      </form>
+      <div class="result" data-out></div>
+    </section>
+
+    <!-- 2. Finiquito -->
+    <section class="panel" id="finiquito" data-title="📄 Finiquito">
+      <h2>Finiquito</h2>
+      <p class="hint">Estimación del finiquito según el Código del Trabajo.</p>
+      <form class="grid">
+        <label>Última remuneración mensual ($)<input type="number" name="sueldo" value="1000000" min="0"></label>
+        <label>Fecha de inicio<input type="date" name="inicio"></label>
+        <label>Fecha de término<input type="date" name="termino"></label>
+        <label>Causal
+          <select name="causal">
+            <option value="161">Necesidades de la empresa (art. 161)</option>
+            <option value="159">Renuncia / mutuo acuerdo / fin de plazo</option>
+          </select>
+        </label>
+        <label>¿Se dio aviso con 30 días?
+          <select name="aviso">
+            <option value="no">No (se paga mes de aviso)</option>
+            <option value="si">Sí</option>
+          </select>
+        </label>
+        <label>Días de vacaciones pendientes (hábiles)<input type="number" name="vac" value="0" min="0" step="0.01"></label>
+        <label>Días trabajados del último mes sin pagar<input type="number" name="diasMes" value="0" min="0" max="31"></label>
+      </form>
+      <div class="result" data-out></div>
+    </section>
+
+    <!-- 3. Conversor UF -->
+    <section class="panel" id="conversor" data-title="💱 Conversor UF">
+      <h2>Conversor UF, UTM, dólar y euro</h2>
+      <p class="hint">Valores del día obtenidos de mindicador.cl. Puedes editarlos manualmente.</p>
+      <form class="grid">
+        <label>Cantidad<input type="number" name="monto" value="1" step="any"></label>
+        <label>Desde
+          <select name="desde">
+            <option value="uf">UF</option><option value="utm">UTM</option>
+            <option value="dolar">Dólar (USD)</option><option value="euro">Euro (EUR)</option>
+            <option value="clp">Pesos (CLP)</option>
+          </select>
+        </label>
+        <label>Hacia
+          <select name="hacia">
+            <option value="clp">Pesos (CLP)</option><option value="uf">UF</option>
+            <option value="utm">UTM</option><option value="dolar">Dólar (USD)</option>
+            <option value="euro">Euro (EUR)</option>
+          </select>
+        </label>
+        <label>Valor UF ($)<input type="number" name="uf" step="0.01"></label>
+        <label>Valor UTM ($)<input type="number" name="utm" step="1"></label>
+        <label>Valor dólar ($)<input type="number" name="dolar" step="0.01"></label>
+        <label>Valor euro ($)<input type="number" name="euro" step="0.01"></label>
+      </form>
+      <div class="result" data-out></div>
+    </section>
+
+    <!-- 4. Costo de envío -->
+    <section class="panel" id="envio" data-title="📦 Costo de envío">
+      <h2>Costo de envío</h2>
+      <p class="hint">Calcula peso volumétrico y una estimación del costo. Ajusta las tarifas según tu courier.</p>
+      <form class="grid">
+        <label>Peso real (kg)<input type="number" name="peso" value="2" step="0.1" min="0"></label>
+        <label>Largo (cm)<input type="number" name="largo" value="30" min="0"></label>
+        <label>Ancho (cm)<input type="number" name="ancho" value="20" min="0"></label>
+        <label>Alto (cm)<input type="number" name="alto" value="15" min="0"></label>
+        <label>Destino
+          <select name="zona">
+            <option value="1">Misma ciudad</option>
+            <option value="1.4" selected>Misma región</option>
+            <option value="1.9">Otra región (centro)</option>
+            <option value="2.6">Zona extrema (norte grande / sur austral)</option>
+          </select>
+        </label>
+        <label>Tarifa base ($)<input type="number" name="tarifaBase" value="3500" min="0"></label>
+        <label>Costo por kg adicional ($)<input type="number" name="porKg" value="900" min="0"></label>
+        <label>Valor declarado ($)<small>seguro 1%</small><input type="number" name="declarado" value="0" min="0"></label>
+        <label>Factor volumétrico<select name="factor"><option value="4000">4000 (nacional)</option><option value="5000">5000 (internacional)</option><option value="6000">6000</option></select></label>
+      </form>
+      <div class="result" data-out></div>
+    </section>
+
+    <!-- 5. Cuánto cobrar -->
+    <section class="panel" id="cobrar" data-title="🧮 Cuánto cobrar">
+      <h2>¿Cuánto cobrar por un trabajo?</h2>
+      <p class="hint">Calcula tu valor hora como independiente y el precio de un proyecto.</p>
+      <form class="grid">
+        <label>Ingreso líquido mensual deseado ($)<input type="number" name="deseado" value="1200000" min="0"></label>
+        <label>Gastos mensuales del negocio ($)<small>internet, software, equipos…</small><input type="number" name="gastos" value="100000" min="0"></label>
+        <label>Horas facturables por semana<input type="number" name="horas" value="25" min="1"></label>
+        <label>Semanas de vacaciones al año<input type="number" name="vacaciones" value="4" min="0" max="52"></label>
+        <label>Margen de ganancia / imprevistos (%)<input type="number" name="margen" value="15" min="0"></label>
+        <label>Emites
+          <select name="doc">
+            <option value="boleta">Boleta de honorarios (retención 15,25%)</option>
+            <option value="factura">Factura (+19% IVA al cliente)</option>
+          </select>
+        </label>
+        <label>Horas estimadas del proyecto<input type="number" name="horasProy" value="40" min="0"></label>
+      </form>
+      <div class="result" data-out></div>
+    </section>
+
+    <!-- 6. IVA -->
+    <section class="panel" id="iva" data-title="🧾 IVA">
+      <h2>Calculadora de IVA (19%)</h2>
+      <p class="hint">Agrega o quita el IVA a un monto.</p>
+      <form class="grid">
+        <label>Monto ($)<input type="number" name="monto" value="100000" min="0"></label>
+        <label>El monto es
+          <select name="modo">
+            <option value="neto">Neto (sin IVA)</option>
+            <option value="bruto">Total (con IVA)</option>
+          </select>
+        </label>
+      </form>
+      <div class="result" data-out></div>
+    </section>
+
+    <!-- 7. Boleta de honorarios -->
+    <section class="panel" id="honorarios" data-title="✍️ Boleta honorarios">
+      <h2>Boleta de honorarios</h2>
+      <p class="hint">Calcula bruto, retención y líquido. Retención vigente 2026: 15,25%.</p>
+      <form class="grid">
+        <label>Monto ($)<input type="number" name="monto" value="500000" min="0"></label>
+        <label>El monto es
+          <select name="modo">
+            <option value="bruto">Bruto (lo que dice la boleta)</option>
+            <option value="liquido">Líquido (lo que quiero recibir)</option>
+          </select>
+        </label>
+        <label>Tasa de retención (%)<input type="number" name="tasa" value="15.25" step="0.01" min="0"></label>
+      </form>
+      <div class="result" data-out></div>
+    </section>
+
+    <!-- 8. Crédito -->
+    <section class="panel" id="credito" data-title="🏦 Crédito">
+      <h2>Simulador de crédito</h2>
+      <p class="hint">Cuota mensual fija (sistema francés) y costo total del préstamo.</p>
+      <form class="grid">
+        <label>Monto del crédito ($)<input type="number" name="monto" value="5000000" min="0"></label>
+        <label>Tasa de interés mensual (%)<input type="number" name="tasa" value="1.5" step="0.01" min="0"></label>
+        <label>Plazo (meses)<input type="number" name="plazo" value="36" min="1"></label>
+        <label>Gastos y seguros iniciales ($)<input type="number" name="gastos" value="0" min="0"></label>
+      </form>
+      <div class="result" data-out></div>
+    </section>
+
+    <!-- 9. Ahorro -->
+    <section class="panel" id="ahorro" data-title="🐷 Ahorro">
+      <h2>Ahorro e interés compuesto</h2>
+      <p class="hint">Proyecta cuánto tendrás ahorrando todos los meses.</p>
+      <form class="grid">
+        <label>Monto inicial ($)<input type="number" name="inicial" value="500000" min="0"></label>
+        <label>Aporte mensual ($)<input type="number" name="aporte" value="100000" min="0"></label>
+        <label>Rentabilidad anual (%)<input type="number" name="tasa" value="6" step="0.1"></label>
+        <label>Años<input type="number" name="anios" value="10" min="1" max="80"></label>
+      </form>
+      <div class="result" data-out></div>
+    </section>
+
+    <!-- 10. Dividir cuenta -->
+    <section class="panel" id="cuenta" data-title="🍽️ Dividir cuenta">
+      <h2>Dividir la cuenta y propina</h2>
+      <p class="hint">Reparte la cuenta entre amigos, con propina sugerida.</p>
+      <form class="grid">
+        <label>Total de la cuenta ($)<input type="number" name="total" value="58000" min="0"></label>
+        <label>Propina (%)<input type="number" name="propina" value="10" min="0"></label>
+        <label>Número de personas<input type="number" name="personas" value="4" min="1"></label>
+        <label>Redondear por persona a
+          <select name="redondeo">
+            <option value="1">Sin redondeo</option>
+            <option value="100">$100</option>
+            <option value="500">$500</option>
+            <option value="1000" selected>$1.000</option>
+          </select>
+        </label>
+      </form>
+      <div class="result" data-out></div>
+    </section>
+
+  </main>
+
+  <footer class="wrap foot">
+    <p>Los resultados son referenciales y no reemplazan asesoría legal, contable o tributaria. Tasas y topes pueden cambiar: revisa SII, Dirección del Trabajo y Superintendencia de Pensiones.</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
