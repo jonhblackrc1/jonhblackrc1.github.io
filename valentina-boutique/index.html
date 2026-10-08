@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Valentina Boutique</title>
+<meta name="description" content="Valentina Boutique · Moda sostenible. Accesorios para el hogar, deco y cositas lindas.">
+<link rel="icon" href="logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Allura&family=Fredoka:wght@500;600&family=Josefin+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --purple:#4b2a7b;
+  --purple-2:#6c46a8;
+  --lilac:#e9e1f5;
+  --lilac-2:#d9cbee;
+  --blush:#f8e9ec;
+  --heart:#d9566e;
+  --butter:#f6e7b4;
+  --ink:#1d1724;
+  --muted:#6e6479;
+  --paper:#fffdfb;
+  --line:#ece5f3;
+  --radius:22px;
+  --shadow:0 14px 40px -18px rgba(75,42,123,.35);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Josefin Sans",system-ui,sans-serif;font-size:17px;line-height:1.55;
+}
+img{max-width:100%;display:block}
+a{color:inherit}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+.script{font-family:"Allura",cursive;font-weight:400}
+.round{font-family:"Fredoka",sans-serif}
+.eyebrow{letter-spacing:.42em;text-transform:uppercase;font-size:.78rem;font-weight:600;color:var(--purple)}
+
+/* Header */
+header{position:sticky;top:0;z-index:20;background:rgba(255,253,251,.88);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:70px;gap:16px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.brand img{width:46px;height:46px;border-radius:50%;box-shadow:0 0 0 2px var(--purple)}
+.brand span{font-size:2.1rem;line-height:1}
+.brand small{font-family:"Fredoka";color:var(--purple);font-size:.85rem;margin-left:2px}
+.nav ul{display:flex;gap:26px;list-style:none;margin:0;padding:0}
+.nav ul a{text-decoration:none;font-size:.92rem;letter-spacing:.12em;text-transform:uppercase}
+.nav ul a:hover{color:var(--purple)}
+.cart-btn{position:relative;border:1.5px solid var(--purple);background:none;border-radius:999px;padding:8px 16px;font:inherit;font-size:.9rem;color:var(--purple);cursor:pointer}
+.cart-btn b{display:inline-grid;place-items:center;min-width:22px;height:22px;border-radius:50%;background:var(--heart);color:#fff;font-size:.75rem;margin-left:6px}
+@media (max-width:760px){.nav ul{display:none}}
+
+/* Hero */
+.hero{position:relative;overflow:hidden;background:
+  radial-gradient(60% 70% at 85% 20%,var(--blush) 0,transparent 70%),
+  radial-gradient(50% 60% at 10% 90%,var(--lilac) 0,transparent 70%)}
+.hero .wrap{display:grid;grid-template-columns:1.1fr .9fr;align-items:center;gap:40px;padding-top:64px;padding-bottom:80px}
+.hero h1{margin:.2em 0 .1em;font-size:clamp(4rem,11vw,7.5rem);line-height:.9}
+.hero h1 .heart{color:var(--heart);font-size:.35em;vertical-align:.9em;margin-left:-.15em}
+.hero .sub{font-family:"Fredoka";font-size:1.7rem;color:var(--purple);margin:0 0 18px}
+.hero p.lead{max-width:30em;color:var(--muted);margin:0 0 30px}
+.btns{display:flex;flex-wrap:wrap;gap:12px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 26px;border-radius:999px;text-decoration:none;font-weight:600;letter-spacing:.06em;border:1.5px solid var(--purple);transition:transform .15s,box-shadow .15s}
+.btn:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+.btn.solid{background:var(--purple);color:#fff}
+.btn.ghost{color:var(--purple);background:#fff}
+.logo-ring{position:relative;justify-self:center;width:min(420px,80vw);aspect-ratio:1}
+.logo-ring img{width:100%;height:100%;border-radius:50%;box-shadow:var(--shadow);background:#fff}
+.logo-ring::before{content:"";position:absolute;inset:-18px;border-radius:50%;border:2px dashed var(--purple-2);opacity:.45;animation:spin 40s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.bag{position:absolute;width:64px;height:72px;border-radius:6px 6px 10px 10px;box-shadow:var(--shadow)}
+.bag::before{content:"";position:absolute;left:50%;top:-16px;width:30px;height:26px;transform:translateX(-50%);border:3px solid rgba(0,0,0,.18);border-bottom:none;border-radius:16px 16px 0 0}
+.bag.b1{background:var(--butter);left:-10px;bottom:20px;transform:rotate(-10deg)}
+.bag.b2{background:var(--lilac-2);right:-6px;top:30px;transform:rotate(9deg);width:52px;height:60px}
+@media (max-width:860px){.hero .wrap{grid-template-columns:1fr;text-align:center;padding-top:40px}.hero p.lead{margin-inline:auto}.btns{justify-content:center}.logo-ring{grid-row:1;width:min(300px,72vw)}}
+
+/* Ribbon */
+.ribbon{background:var(--purple);color:#fff;overflow:hidden;white-space:nowrap}
+.ribbon div{display:inline-block;padding:12px 0;animation:marquee 28s linear infinite;letter-spacing:.35em;font-size:.8rem;text-transform:uppercase}
+.ribbon span{margin:0 26px}
+@keyframes marquee{to{transform:translateX(-50%)}}
+
+/* Sections */
+section{padding:84px 0}
+.head{text-align:center;margin-bottom:42px}
+.head h2{font-size:clamp(3rem,7vw,4.4rem);margin:.05em 0 0;line-height:1;font-family:"Allura";font-weight:400}
+.head p{color:var(--muted);margin:8px auto 0;max-width:34em}
+
+/* Categories */
+.cats{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.cat{border-radius:var(--radius);padding:28px 20px;text-align:center;text-decoration:none;border:1px solid var(--line);background:#fff;transition:transform .2s,box-shadow .2s;cursor:pointer;font:inherit}
+.cat:hover,.cat.active{transform:translateY(-4px);box-shadow:var(--shadow);border-color:var(--lilac-2)}
+.cat.active{outline:2px solid var(--purple)}
+.cat .ico{width:74px;height:74px;margin:0 auto 14px;border-radius:50%;display:grid;place-items:center;font-size:2rem}
+.cat h3{margin:0;font-family:"Fredoka";font-weight:500;color:var(--purple)}
+.cat small{color:var(--muted)}
+@media (max-width:760px){.cats{grid-template-columns:repeat(2,1fr)}}
+
+/* Products */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:22px}
+.card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column;transition:transform .2s,box-shadow .2s}
+.card:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+.thumb{aspect-ratio:1/1;display:grid;place-items:center;font-size:4.6rem;position:relative}
+.tag{position:absolute;top:12px;left:12px;background:#fff;color:var(--purple);font-size:.72rem;letter-spacing:.15em;text-transform:uppercase;padding:5px 10px;border-radius:999px;font-weight:600}
+.tag.eco{background:var(--purple);color:#fff}
+.card .body{padding:16px 18px 18px;display:flex;flex-direction:column;gap:6px;flex:1}
+.card h3{margin:0;font-size:1.05rem;font-weight:600}
+.card p{margin:0;color:var(--muted);font-size:.9rem;flex:1}
+.row{display:flex;align-items:center;justify-content:space-between;margin-top:10px}
+.price{font-family:"Fredoka";font-size:1.25rem;color:var(--purple)}
+.add{border:none;background:var(--blush);color:var(--heart);width:42px;height:42px;border-radius:50%;font-size:1.3rem;cursor:pointer;transition:background .15s,color .15s}
+.add:hover{background:var(--heart);color:#fff}
+@media (max-width:520px){.grid{grid-template-columns:repeat(2,1fr);gap:12px}.thumb{font-size:3rem}.card .body{padding:12px}.card p{font-size:.82rem}}
+.bg1{background:linear-gradient(135deg,#f3edfb,#e6dbf5)}
+.bg2{background:linear-gradient(135deg,#fdf1f3,#f6dfe4)}
+.bg3{background:linear-gradient(135deg,#fdf8e6,#f5e8bd)}
+.bg4{background:linear-gradient(135deg,#f1f0f4,#e2dfe8)}
+
+/* Eco band */
+.eco-band{background:var(--lilac)}
+.eco-band .wrap{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
+.eco-item{text-align:center;padding:10px}
+.eco-item .n{width:64px;height:64px;margin:0 auto 12px;border-radius:50%;background:#fff;display:grid;place-items:center;font-size:1.7rem;box-shadow:0 0 0 2px var(--purple)}
+.eco-item h3{font-family:"Fredoka";font-weight:500;color:var(--purple);margin:0 0 6px}
+.eco-item p{margin:0;color:var(--muted)}
+@media (max-width:760px){.eco-band .wrap{grid-template-columns:1fr}}
+
+/* Contact */
+.contact{text-align:center}
+.contact .box{max-width:720px;margin:0 auto;background:#fff;border-radius:32px;padding:50px 30px;border:2px dashed var(--lilac-2);position:relative}
+.contact .box img{width:96px;height:96px;border-radius:50%;margin:-98px auto 10px;box-shadow:0 0 0 6px var(--paper),var(--shadow)}
+.contact h2{font-family:"Allura";font-weight:400;font-size:3.4rem;margin:0;line-height:1.1}
+
+footer{background:var(--ink);color:#cfc6dc;text-align:center;padding:36px 20px;font-size:.88rem}
+footer .script{font-size:2.2rem;color:#fff;display:block;margin-bottom:4px}
+
+/* Cart drawer */
+.drawer{position:fixed;inset:0;z-index:50;pointer-events:none}
+.drawer .shade{position:absolute;inset:0;background:rgba(29,23,36,.4);opacity:0;transition:opacity .25s}
+.drawer aside{position:absolute;right:0;top:0;height:100%;width:min(380px,92vw);background:var(--paper);transform:translateX(100%);transition:transform .3s;display:flex;flex-direction:column;padding:24px}
+.drawer.open{pointer-events:auto}.drawer.open .shade{opacity:1}.drawer.open aside{transform:none}
+.drawer h3{font-family:"Allura";font-weight:400;font-size:2.6rem;margin:0 0 10px}
+.drawer ul{list-style:none;padding:0;margin:0;flex:1;overflow:auto}
+.drawer li{display:flex;justify-content:space-between;gap:10px;padding:12px 0;border-bottom:1px solid var(--line)}
+.drawer li button{border:none;background:none;color:var(--heart);cursor:pointer;font-size:1rem}
+.drawer .total{display:flex;justify-content:space-between;font-family:"Fredoka";font-size:1.25rem;color:var(--purple);margin:16px 0}
+.drawer .close{position:absolute;top:16px;right:18px;border:none;background:none;font-size:1.6rem;cursor:pointer;color:var(--muted)}
+.empty{color:var(--muted);text-align:center;margin-top:40px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,120px);background:var(--purple);color:#fff;padding:12px 22px;border-radius:999px;transition:transform .3s;z-index:60;font-size:.92rem}
+.toast.show{transform:translate(-50%,0)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="#inicio"><img src="logo.png" alt="Logo Valentina Boutique"><span class="script">Valentina</span><small>Boutique</small></a>
+    <ul>
+      <li><a href="#categorias">Categorías</a></li>
+      <li><a href="#productos">Productos</a></li>
+      <li><a href="#nosotras">Nosotras</a></li>
+      <li><a href="#contacto">Contacto</a></li>
+    </ul>
+    <button class="cart-btn" id="openCart" aria-label="Ver mi bolsa">🛍 Mi bolsa<b id="count">0</b></button>
+  </div>
+</header>
+
+<main>
+<section class="hero" id="inicio" style="padding:0">
+  <div class="wrap">
+    <div>
+      <div class="eyebrow">♻ Moda sostenible</div>
+      <h1 class="script">Valentina<span class="heart">♥</span></h1>
+      <p class="sub">Boutique</p>
+      <p class="lead">Accesorios para el hogar, deco y cositas lindas elegidas con cariño. Piezas únicas, precios amables y una segunda vida para cada objeto.</p>
+      <div class="btns">
+        <a class="btn solid" href="#productos">Ver productos →</a>
+        <a class="btn ghost" href="https://www.instagram.com/valentinaventasbutique/" target="_blank" rel="noopener">@valentinaventasbutique</a>
+      </div>
+    </div>
+    <div class="logo-ring">
+      <img src="logo.png" alt="Valentina Boutique · Moda sostenible">
+      <span class="bag b1"></span><span class="bag b2"></span>
+    </div>
+  </div>
+</section>
+
+<div class="ribbon" aria-hidden="true"><div id="marquee"></div></div>
+
+<section id="categorias">
+  <div class="wrap">
+    <div class="head">
+      <div class="eyebrow">Explora</div>
+      <h2>Nuestras categorías</h2>
+    </div>
+    <div class="cats" id="cats"></div>
+  </div>
+</section>
+
+<section id="productos" style="padding-top:0">
+  <div class="wrap">
+    <div class="head">
+      <div class="eyebrow">Lo más lindo</div>
+      <h2>Productos</h2>
+      <p>Stock limitado: muchas piezas son únicas. Agrégalas a tu bolsa y pídelas por mensaje.</p>
+    </div>
+    <div class="grid" id="grid"></div>
+  </div>
+</section>
+
+<section class="eco-band" id="nosotras">
+  <div class="wrap">
+    <div class="eco-item"><div class="n">♻</div><h3>Segunda vida</h3><p>Rescatamos y seleccionamos objetos en buen estado para que sigan siendo útiles y bonitos.</p></div>
+    <div class="eco-item"><div class="n">♥</div><h3>Hecho con cariño</h3><p>Cada pieza se revisa, se limpia y se envuelve a mano antes de llegar a tu casa.</p></div>
+    <div class="eco-item"><div class="n">🛍</div><h3>Envíos y retiro</h3><p>Coordinamos entrega o retiro por mensaje directo, rápido y sin complicaciones.</p></div>
+  </div>
+</section>
+
+<section class="contact" id="contacto">
+  <div class="wrap">
+    <div class="box">
+      <img src="logo.png" alt="">
+      <div class="eyebrow">Hablemos</div>
+      <h2>¿Te gustó algo?</h2>
+      <p style="color:var(--muted);max-width:30em;margin:6px auto 26px">Escríbenos por Instagram con el nombre del producto y te respondemos con disponibilidad, envío y formas de pago.</p>
+      <div class="btns" style="justify-content:center">
+        <a class="btn solid" href="https://ig.me/m/valentinaventasbutique" target="_blank" rel="noopener">Enviar mensaje</a>
+        <a class="btn ghost" href="https://www.instagram.com/valentinaventasbutique/" target="_blank" rel="noopener">Ver Instagram</a>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <span class="script">Valentina</span>
+  Boutique · Moda sostenible · © <span id="year"></span>
+</footer>
+
+<div class="drawer" id="drawer" aria-hidden="true">
+  <div class="shade" data-close></div>
+  <aside role="dialog" aria-label="Mi bolsa">
+    <button class="close" data-close aria-label="Cerrar">×</button>
+    <h3>Mi bolsa</h3>
+    <ul id="cartList"></ul>
+    <div class="total"><span>Total</span><span id="cartTotal">$0</span></div>
+    <a class="btn solid" id="checkout" href="#" target="_blank" rel="noopener" style="justify-content:center">Pedir por Instagram</a>
+  </aside>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+// Edita aquí tus categorías y productos
+const CATEGORIES = [
+  {id:"todo",  name:"Todo",        icon:"✨", bg:"bg4", note:"Ver todo"},
+  {id:"deco",  name:"Decoración",  icon:"🕯️", bg:"bg1", note:"Velas, cuadros, floreros"},
+  {id:"cocina",name:"Cocina",      icon:"☕", bg:"bg3", note:"Tazas, frascos, vajilla"},
+  {id:"textil",name:"Textiles",    icon:"🧺", bg:"bg2", note:"Cojines, mantas, canastos"},
+  {id:"varios",name:"Cosas varias",icon:"🎀", bg:"bg4", note:"Regalos y detalles"}
+];
+const PRODUCTS = [
+  {name:"Set de velas aromáticas", desc:"Tres velas de soya con aroma a lavanda.", price:8990,  cat:"deco",  icon:"🕯️", tag:"Nuevo"},
+  {name:"Florero de cerámica",     desc:"Tono crema, ideal para flores secas.",   price:12990, cat:"deco",  icon:"🏺", tag:"Pieza única", eco:true},
+  {name:"Cuadro botánico",         desc:"Lámina enmarcada 30×40 cm.",             price:14990, cat:"deco",  icon:"🖼️"},
+  {name:"Tazas mug pastel (par)",  desc:"Dos tazas en lila y rosa palo.",         price:9990,  cat:"cocina",icon:"☕", tag:"Favorito"},
+  {name:"Frascos de vidrio x3",    desc:"Con tapa de bambú para tu despensa.",    price:10990, cat:"cocina",icon:"🫙", eco:true, tag:"Reutilizado"},
+  {name:"Tabla de madera",         desc:"Para picar o servir, madera nativa.",    price:11990, cat:"cocina",icon:"🪵"},
+  {name:"Cojín bordado",           desc:"Funda de lino 45×45 con relleno.",       price:13990, cat:"textil",icon:"🛋️"},
+  {name:"Canasto de mimbre",       desc:"Organizador tejido a mano.",             price:15990, cat:"textil",icon:"🧺", tag:"Pieza única", eco:true},
+  {name:"Manta tejida",            desc:"Suave y calentita, tono avena.",         price:19990, cat:"textil",icon:"🧶"},
+  {name:"Espejo redondo",          desc:"Marco dorado, 40 cm de diámetro.",       price:17990, cat:"varios",icon:"🪞"},
+  {name:"Planta suculenta",        desc:"En macetero de greda pintado.",          price:5990,  cat:"varios",icon:"🪴", tag:"Nuevo"},
+  {name:"Caja de regalo sorpresa", desc:"Selección de 4 cositas lindas.",         price:16990, cat:"varios",icon:"🎁", tag:"Favorito"}
+];
+
+const IG = "valentinaventasbutique";
+const bgFor = c => (CATEGORIES.find(x=>x.id===c)||{}).bg || "bg4";
+const clp = n => "$" + n.toLocaleString("es-CL");
+const $ = s => document.querySelector(s);
+
+$("#year").textContent = new Date().getFullYear();
+const words = ["Moda sostenible","Hogar & deco","Piezas únicas","Segunda vida","Hecho con cariño"];
+$("#marquee").innerHTML = [...words,...words,...words,...words].map(w=>`<span>${w}</span>✦`).join("");
+
+let current = "todo";
+function renderCats(){
+  $("#cats").innerHTML = CATEGORIES.filter(c=>c.id!=="todo").map(c=>`
+    <button class="cat ${current===c.id?"active":""}" data-cat="${c.id}">
+      <div class="ico ${c.bg}">${c.icon}</div><h3>${c.name}</h3><small>${c.note}</small>
+    </button>`).join("");
+}
+function renderProducts(){
+  const list = PRODUCTS.map((p,i)=>({...p,i})).filter(p=>current==="todo"||p.cat===current);
+  $("#grid").innerHTML = list.map(p=>`
+    <article class="card">
+      <div class="thumb ${bgFor(p.cat)}">${p.tag?`<span class="tag ${p.eco?"eco":""}">${p.tag}</span>`:""}${p.icon}</div>
+      <div class="body">
+        <h3>${p.name}</h3><p>${p.desc}</p>
+        <div class="row"><span class="price">${clp(p.price)}</span><button class="add" data-add="${p.i}" aria-label="Agregar ${p.name}">+</button></div>
+      </div>
+    </article>`).join("");
+}
+$("#cats").addEventListener("click",e=>{
+  const b=e.target.closest("[data-cat]"); if(!b) return;
+  current = current===b.dataset.cat ? "todo" : b.dataset.cat;
+  renderCats(); renderProducts();
+  $("#productos").scrollIntoView({behavior:"smooth"});
+});
+
+// Bolsa
+let cart = [];
+try{ cart = JSON.parse(localStorage.getItem("vb-cart")||"[]"); }catch(e){}
+function save(){ try{ localStorage.setItem("vb-cart",JSON.stringify(cart)); }catch(e){} }
+function renderCart(){
+  $("#count").textContent = cart.length;
+  $("#cartList").innerHTML = cart.length ? cart.map((i,k)=>`<li><span>${PRODUCTS[i].icon} ${PRODUCTS[i].name}<br><small style="color:var(--muted)">${clp(PRODUCTS[i].price)}</small></span><button data-rm="${k}" aria-label="Quitar">✕</button></li>`).join("")
+    : `<p class="empty">Tu bolsa está vacía ♥</p>`;
+  const total = cart.reduce((s,i)=>s+PRODUCTS[i].price,0);
+  $("#cartTotal").textContent = clp(total);
+  const msg = "Hola! Me interesa: " + cart.map(i=>PRODUCTS[i].name).join(", ") + " (total " + clp(total) + ")";
+  $("#checkout").href = cart.length ? `https://ig.me/m/${IG}?text=${encodeURIComponent(msg)}` : `https://ig.me/m/${IG}`;
+}
+function toast(t){ const el=$("#toast"); el.textContent=t; el.classList.add("show"); clearTimeout(toast.t); toast.t=setTimeout(()=>el.classList.remove("show"),1800); }
+$("#grid").addEventListener("click",e=>{
+  const b=e.target.closest("[data-add]"); if(!b) return;
+  cart.push(+b.dataset.add); save(); renderCart(); toast("Agregado a tu bolsa ♥");
+});
+$("#cartList").addEventListener("click",e=>{
+  const b=e.target.closest("[data-rm]"); if(!b) return;
+  cart.splice(+b.dataset.rm,1); save(); renderCart();
+});
+const drawer=$("#drawer");
+$("#openCart").onclick=()=>{drawer.classList.add("open");drawer.setAttribute("aria-hidden","false")};
+drawer.addEventListener("click",e=>{ if(e.target.closest("[data-close]")){drawer.classList.remove("open");drawer.setAttribute("aria-hidden","true")} });
+
+cart = cart.filter(i=>PRODUCTS[i]);
+renderCats(); renderProducts(); renderCart();
+</script>
+</body>
+</html>
