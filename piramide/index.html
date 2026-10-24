@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pirámide · El juego para beber</title>
+<meta name="description" content="Pirámide: el clásico juego de cartas para beber con amigos. Descarga la app para Android.">
+<meta name="theme-color" content="#2a0d6e">
+<link rel="icon" href="icon-512.png">
+<meta property="og:title" content="Pirámide · El juego para beber">
+<meta property="og:description" content="4 cartas por jugador, 7 filas, 1 cima. ¿Quién termina más tomado?">
+<meta property="og:image" content="icon-512.png">
+<style>
+@font-face{font-family:'Lilita';src:url(app/fonts/lilita-one.woff2) format('woff2');font-display:swap}
+@font-face{font-family:'Nunito';src:url(app/fonts/nunito-700.woff2) format('woff2');font-weight:700}
+@font-face{font-family:'Nunito';src:url(app/fonts/nunito-900.woff2) format('woff2');font-weight:900}
+:root{--bg:#14052f;--purple:#6C2BD9;--pink:#FF3D6E;--yellow:#FFC400;--green:#00C27F;--blue:#00A8E8}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:#fff;font-family:'Nunito',system-ui,sans-serif;font-weight:700;overflow-x:hidden}
+a{color:inherit}
+.lil{font-family:'Lilita',sans-serif;font-weight:400;letter-spacing:.5px}
+.wrap{max-width:1100px;margin:0 auto;padding:0 16px}
+.hero{position:relative;background:radial-gradient(90% 70% at 70% 30%,#7a35e8 0%,#4a17a8 40%,#14052f 100%);overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;opacity:.07;background-image:radial-gradient(#fff 1.5px,transparent 1.6px);background-size:24px 24px}
+.hero .wrap{position:relative;display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;padding-top:40px;padding-bottom:60px}
+nav{position:relative;display:flex;align-items:center;gap:12px;padding:18px 16px 0;max-width:1100px;margin:0 auto}
+nav img{width:44px;height:44px;border-radius:12px}
+nav b{font-family:'Lilita';font-weight:400;font-size:24px;letter-spacing:1px}
+nav span{margin-left:auto;font-size:13px;background:rgba(255,255,255,.14);padding:6px 12px;border-radius:99px}
+h1{font-size:clamp(54px,9vw,104px);line-height:.95;margin:0 0 12px;text-shadow:0 6px 0 #c41747,0 14px 30px rgba(0,0,0,.4)}
+.tag{color:var(--yellow);font-family:'Lilita';letter-spacing:4px;font-size:clamp(16px,2.2vw,22px)}
+.lead{font-size:clamp(17px,2vw,20px);line-height:1.5;opacity:.92;max-width:520px;margin:18px 0 28px}
+.cta{display:inline-flex;align-items:center;gap:14px;background:#fff;color:var(--purple);text-decoration:none;padding:18px 30px;border-radius:999px;font-family:'Lilita';font-size:24px;letter-spacing:1px;box-shadow:0 7px 0 rgba(0,0,0,.3);transition:transform .1s,box-shadow .1s}
+.cta:active{transform:translateY(5px);box-shadow:0 2px 0 rgba(0,0,0,.3)}
+.cta svg{width:30px;height:30px;flex:none}
+.cta small{display:block;font-family:'Nunito';font-weight:900;font-size:12px;letter-spacing:0;opacity:.7}
+.meta{margin-top:16px;font-size:14px;opacity:.75}
+.secondary{display:inline-block;margin-left:14px;font-size:16px;opacity:.9}
+.phone{justify-self:center;width:300px;height:620px;border-radius:46px;background:#0b0218;padding:12px;box-shadow:0 0 0 3px #3a2370,0 40px 80px rgba(0,0,0,.6),0 0 120px rgba(160,90,255,.35);position:relative;transform:rotate(3deg);animation:float 5s ease-in-out infinite}
+@keyframes float{50%{transform:rotate(1deg) translateY(-14px)}}
+.phone::before{content:"";position:absolute;top:20px;left:50%;width:90px;height:22px;border-radius:20px;background:#0b0218;transform:translateX(-50%);z-index:2}
+.screen{width:100%;height:100%;border-radius:36px;overflow:hidden;position:relative;background:#1b0b3a}
+.screen iframe{width:390px;height:842px;border:0;transform:scale(.7077);transform-origin:0 0;position:absolute;left:0;top:0}
+.floaters span{position:absolute;width:56px;height:78px;border-radius:9px;border:4px solid #fff;box-shadow:0 6px 0 rgba(0,0,0,.25);opacity:.9;animation:drift 9s ease-in-out infinite}
+@keyframes drift{50%{transform:translateY(-24px) rotate(10deg)}}
+section{padding:70px 0}
+h2{font-size:clamp(34px,5vw,52px);text-align:center;margin:0 0 10px}
+.sub{text-align:center;opacity:.8;margin:0 auto 40px;max-width:560px;font-size:18px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.f{border-radius:26px;padding:24px;box-shadow:0 8px 0 rgba(0,0,0,.25)}
+.f .e{font-size:40px}
+.f h3{font-family:'Lilita';font-weight:400;font-size:24px;margin:8px 0 6px;letter-spacing:.5px}
+.f p{margin:0;line-height:1.45;opacity:.95}
+.rows{display:flex;flex-direction:column;align-items:center;gap:8px;margin:0 auto 10px}
+.rows div{display:flex;gap:8px}
+.rows i{display:grid;place-items:center;width:52px;height:72px;border-radius:9px;border:3px solid #fff;font-style:normal;font-family:'Lilita';font-size:20px;box-shadow:0 5px 0 rgba(0,0,0,.25)}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;counter-reset:s}
+.st{background:rgba(255,255,255,.07);border:2px solid rgba(255,255,255,.1);border-radius:22px;padding:20px}
+.st::before{counter-increment:s;content:counter(s);display:grid;place-items:center;width:42px;height:42px;border-radius:50%;background:var(--yellow);color:#14052f;font-family:'Lilita';font-size:22px;margin-bottom:10px}
+.st p{margin:0;line-height:1.45;opacity:.9}
+.final{text-align:center;background:radial-gradient(80% 100% at 50% 0%,#ff6b91,#FF3D6E 50%,#b3123f);border-radius:34px;padding:50px 20px;box-shadow:0 10px 0 rgba(0,0,0,.25)}
+.final .cta{color:var(--pink)}
+footer{text-align:center;padding:30px 16px 50px;font-size:14px;opacity:.7;line-height:1.6}
+@media (max-width:860px){
+  .hero .wrap{grid-template-columns:1fr;text-align:center;padding-top:24px}
+  .lead{margin-left:auto;margin-right:auto}
+  .phone{transform:none;animation:none;margin-top:10px}
+  .grid{grid-template-columns:1fr}
+  .steps{grid-template-columns:1fr 1fr}
+  .secondary{display:block;margin:14px 0 0}
+  .floaters{display:none}
+}
+@media (max-width:420px){.steps{grid-template-columns:1fr}.cta{font-size:21px;padding:16px 24px}.phone{width:270px;height:558px}.screen iframe{transform:scale(.6308)}}
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="floaters" aria-hidden="true">
+    <span style="left:6%;top:18%;background:#00C27F;animation-delay:-2s"></span>
+    <span style="left:44%;top:75%;background:#FF3D9A;animation-delay:-5s;transform:rotate(-12deg)"></span>
+    <span style="right:4%;top:8%;background:#FFB300;animation-delay:-7s"></span>
+  </div>
+  <nav><img src="icon-512.png" alt=""><b>PIRÁMIDE</b><span>Solo +18</span></nav>
+  <div class="wrap">
+    <div>
+      <h1 class="lil">PIRÁMIDE</h1>
+      <div class="tag">EL JUEGO PARA BEBER</div>
+      <p class="lead">El clásico de las fiestas, ahora en tu celular. Cada jugador recibe 4 cartas, se arma una pirámide de 7 filas y se voltean una a una. ¿Tienes esa carta? <b>¡A tomar!</b> Cada fila vale más tragos hasta llegar a la cima.</p>
+      <a class="cta" href="piramide.apk" download>
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 9.48l1.84-3.18a.38.38 0 0 0-.66-.38l-1.86 3.22a11.4 11.4 0 0 0-9.84 0L5.22 5.92a.38.38 0 0 0-.66.38L6.4 9.48A10.8 10.8 0 0 0 1 18h22a10.8 10.8 0 0 0-5.4-8.52zM7 15.25a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5zm10 0a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5z"/></svg>
+        <span>DESCARGAR APK<small>Android 5.0 o superior · 0.4 MB</small></span>
+      </a>
+      <a class="secondary" href="app/">o juega desde el navegador →</a>
+      <div class="meta">Gratis · Sin anuncios · Funciona sin internet</div>
+    </div>
+    <div class="phone"><div class="screen"><iframe src="app/" title="Demo de Pirámide" loading="lazy"></iframe></div></div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <h2 class="lil">7 FILAS · 28 CARTAS · 1 CIMA</h2>
+    <p class="sub">Mientras más arriba, más tragos. La punta de la pirámide vale 7.</p>
+    <div class="rows" aria-hidden="true">
+      <div><i style="background:#FFB300">7</i></div>
+      <div><i style="background:#FF7A2F">6</i><i style="background:#FF7A2F">6</i></div>
+      <div><i style="background:#FF3D9A">5</i><i style="background:#FF3D9A">5</i><i style="background:#FF3D9A">5</i></div>
+      <div><i style="background:#8A4DFF">4</i><i style="background:#8A4DFF">4</i><i style="background:#8A4DFF">4</i><i style="background:#8A4DFF">4</i></div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:20px">
+  <div class="wrap">
+    <h2 class="lil">TODO LISTO PARA LA PREVIA</h2>
+    <p class="sub">Diseñado para pasarse el teléfono de mano en mano.</p>
+    <div class="grid">
+      <div class="f" style="background:#FF3D6E"><div class="e">👥</div><h3>2 A 12 JUGADORES</h3><p>Con más de 6 jugadores se usan dos barajas automáticamente.</p></div>
+      <div class="f" style="background:#00A8E8"><div class="e">🤫</div><h3>CARTAS SECRETAS</h3><p>Cada uno ve sus 4 cartas en privado, con cuenta regresiva para memorizarlas.</p></div>
+      <div class="f" style="background:#00C27F"><div class="e">🍺</div><h3>CONTEO AUTOMÁTICO</h3><p>La app sabe quién toma y cuántos tragos. Dos cartas iguales, el doble.</p></div>
+      <div class="f" style="background:#8A4DFF"><div class="e">👀</div><h3>ESPIAR CUESTA</h3><p>¿Se te olvidaron tus cartas? Míralas de nuevo... con tragos de castigo.</p></div>
+      <div class="f" style="background:#FF7A2F"><div class="e">🏆</div><h3>PODIO FINAL</h3><p>Marcador en vivo y coronación del más tomador de la noche.</p></div>
+      <div class="f" style="background:#d99a00"><div class="e">✨</div><h3>ANIMACIONES</h3><p>Cartas en 3D, confeti, sonidos y vibración en cada volteo.</p></div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:20px">
+  <div class="wrap">
+    <h2 class="lil">CÓMO INSTALAR</h2>
+    <p class="sub">La app no está en Play Store: se instala directo desde el archivo APK.</p>
+    <div class="steps">
+      <div class="st"><p>Toca <b>Descargar APK</b> desde tu celular Android.</p></div>
+      <div class="st"><p>Abre el archivo <b>piramide.apk</b> desde las notificaciones o la carpeta Descargas.</p></div>
+      <div class="st"><p>Si lo pide, permite <b>“Instalar apps desconocidas”</b> para tu navegador.</p></div>
+      <div class="st"><p>Toca <b>Instalar</b> y abre Pirámide desde tu pantalla de inicio. 🍻</p></div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:10px">
+  <div class="wrap">
+    <div class="final">
+      <h2 class="lil" style="text-shadow:0 5px 0 rgba(0,0,0,.2)">¿QUIÉN LLEGA A LA CIMA?</h2>
+      <p class="sub" style="margin-bottom:26px;opacity:.95">Descárgala gratis y arma la pirámide esta noche.</p>
+      <a class="cta" href="piramide.apk" download>DESCARGAR APK</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  Pirámide es un juego para mayores de 18 años. Bebe con responsabilidad, conoce tu límite y nunca conduzcas si has bebido.<br>
+  También se puede jugar con bebidas sin alcohol. · © 2026 Black Studio
+</footer>
+</body>
+</html>
