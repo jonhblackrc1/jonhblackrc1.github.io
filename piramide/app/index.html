@@ -296,10 +296,10 @@ input{font:inherit;user-select:text;-webkit-user-select:text}
     <div class="step"><div class="n">1</div><div><b>ANOTA A LOS JUGADORES</b><span>De 2 a 12 personas. Con más de 6 se usan dos barajas.</span></div></div>
     <div class="step"><div class="n">2</div><div><b>CADA UNO RECIBE 4 CARTAS</b><span>Pásense el teléfono: cada jugador mira sus 4 cartas en secreto y trata de memorizarlas.</span></div></div>
     <div class="step"><div class="n">3</div><div><b>SE ARMA LA PIRÁMIDE</b><span>28 cartas boca abajo en 7 filas: 7 abajo y 1 en la punta.</span></div></div>
-    <div class="step"><div class="n">4</div><div><b>SE VOLTEAN UNA A UNA</b><span>Quien tenga una carta del mismo número o figura recibe tantos tragos como el número de la fila. En las filas <i>impares (1, 3, 5 y 7) los regala</i> a quien quiera; en las <i>pares (2, 4 y 6) se los toma</i>. ¡Si tiene dos iguales, el doble!</span>
+    <div class="step"><div class="n">4</div><div><b>SE VOLTEAN UNA A UNA</b><span>Quien tenga una carta del mismo número o figura recibe tantos tragos como el número de la fila. En las filas <i>impares (1, 3, 5 y 7) se los toma</i>; en las <i>pares (2, 4 y 6) los regala</i> a quien quiera. ¡Si tiene dos iguales, el doble!</span>
       <div class="sips" id="sipsLegend"></div></div></div>
-    <div class="step"><div class="n">5</div><div><b>¿SE TE OLVIDARON?</b><span>Puedes espiar tus cartas durante el juego... pero te cuesta tragos de castigo. 👀</span></div></div>
-    <div class="step"><div class="n">6</div><div><b>LA CIMA</b><span>La última carta vale 7 tragos para regalar. Al final se corona al más tomador de la noche. 🏆</span></div></div>
+    <div class="step"><div class="n">5</div><div><b>¿SE TE OLVIDARON?</b><span>Toca 👀 para revisar tus cartas cuando quieras, sin castigo.</span></div></div>
+    <div class="step"><div class="n">6</div><div><b>LA CIMA</b><span>La última carta vale 7 tragos ¡para tomar! Al final se corona al más tomador de la noche. 🏆</span></div></div>
   </div></div>
 </section>
 
@@ -385,7 +385,7 @@ const SUITS=['♠','♥','♦','♣'],RANKS=['A','2','3','4','5','6','7','8','9'
 const COLORS=['#FF3D6E','#00A8E8','#FFB300','#00C27F','#9B4DFF','#FF7A2F','#FF4FC3','#3D6BFF','#14C8B8','#E53935','#7CC242','#C2185B'];
 const ROWC=['#00C27F','#00A8E8','#3D6BFF','#8A4DFF','#FF3D9A','#FF7A2F','#FFB300'];
 const ROWSTART=[0,7,13,18,22,25,27];
-let settings=Object.assign({sound:true,vibe:true,memo:true,memoSecs:10,peek:2},store.get('settings',{}));
+let settings=Object.assign({sound:true,vibe:true,memo:true,memoSecs:10},store.get('settings',{}));
 let players=store.get('players',[]);
 let G=null,cur='splash';
 
@@ -419,7 +419,7 @@ function avHTML(i,cls){const p=players[i];return `<div class="av ${cls||''}" sty
 let toastT;function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('on'),2200)}
 function rowOf(i){let r=0;while(r<6&&i>=ROWSTART[r+1])r++;return r+1}
 function trago(n){return n===1?'1 TRAGO':n+' TRAGOS'}
-function isGive(r){return r%2===1}
+function isGive(r){return r%2===0}
 
 function go(id){
   if(id===cur)return;sfx('tap');
@@ -483,7 +483,6 @@ function renderSettings(){
     tg('vibe','📳 Vibración','Vibra cuando te toca tomar')+
     tg('memo','🧠 Ver cartas al inicio','Cada jugador mira sus 4 cartas en secreto')+
     seg('memoSecs','⏱️ Tiempo para memorizar','Segundos por jugador',[5,10,15],o=>o+'s')+
-    seg('peek','👀 Castigo por espiar','Tragos por volver a ver tus cartas',[0,1,2,3],o=>o)+
     `<div class="set"><div class="t"><b>🍻 Bebe con responsabilidad</b><small>Conoce tu límite. Nunca conduzcas si has bebido. Puedes jugar con bebidas sin alcohol.</small></div></div>`;
 }
 function toggleSet(k){settings[k]=!settings[k];store.set('settings',settings);renderSettings();sfx('tap')}
@@ -561,7 +560,7 @@ function updateBoard(){
   const done=G.idx>=28,r=done?7:rowOf(G.idx);
   document.querySelectorAll('#pyr .card').forEach(c=>c.classList.toggle('next',+c.dataset.i===G.idx));
   $('#rowChip').style.background=ROWC[r-1];
-  $('#rowChip').innerHTML=r===7?`👑 CIMA · 🎁 REGALA 7`:isGive(r)?`FILA ${r} · 🎁 REGALA ${r}`:`FILA ${r} · 🍺 TOMA ${r}`;
+  $('#rowChip').innerHTML=r===7?`👑 CIMA · 🍺 TOMA 7`:isGive(r)?`FILA ${r} · 🎁 REGALA ${r}`:`FILA ${r} · 🍺 TOMA ${r}`;
   $('#prog').style.width=(G.idx/28*100)+'%';
   $('#flipBtn').textContent=done?'VER RESULTADOS':'VOLTEAR CARTA';
   $('#flipBtn').style.color=ROWC[r-1];
@@ -585,7 +584,7 @@ function showReveal(c,r,res,top){
     sfx(top?'top':'drink');vibe(top?[80,60,80,60,200]:[60,50,120]);
     if(top||res.length>=3)confetti(top?220:90);
   }else{body=`<div class="nobody"><span class="e">😅</span>¡Nadie tiene un ${c.r}!<br>${give?'Esta vez nadie regala':'Esta vez se salvan todos'}</div>`;sfx('none')}
-  const title=res.length?(give?(top?'¡REGALA LA CIMA!':res.length>=3?'¡REGALO MASIVO!':'¡A REGALAR!'):(res.length>=3?'¡RONDA MASIVA!':'¡A TOMAR!')):(give?'¡NADIE REGALA!':'¡SE SALVARON!');
+  const title=res.length?(give?(top?'¡REGALA LA CIMA!':res.length>=3?'¡REGALO MASIVO!':'¡A REGALAR!'):(top?'¡A FONDO!':res.length>=3?'¡RONDA MASIVA!':'¡A TOMAR!')):(give?'¡NADIE REGALA!':'¡SE SALVARON!');
   openOv(`<div class="grab"></div>
     <div class="sub">${top?'👑 LA CIMA DE LA PIRÁMIDE':'FILA '+r+' DE 7'} · ${give?'🎁 FILA DE REGALAR':'🍺 FILA DE TOMAR'}</div>
     <div class="rv-top">${cardHTML(c,'big up nb')}<div class="mult">x${r}<small>${r===1?'TRAGO':'TRAGOS'}<br>${give?'PARA REGALAR':'PARA TOMAR'}</small></div></div>
@@ -608,14 +607,14 @@ function openScore(){
 let peekT;
 function openPeek(){
   if(!G||ovOpen)return;sfx('tap');
-  openOv(`<div class="grab" style="background:#ddd"></div><h2 class="lil">👀 ESPIAR CARTAS</h2><p>${settings.peek?`Ver tus cartas cuesta <b>${trago(settings.peek).toLowerCase()}</b> de castigo`:'Elige quién quiere ver sus cartas'}</p>
+  openOv(`<div class="grab" style="background:#ddd"></div><h2 class="lil">👀 VER MIS CARTAS</h2><p>Elige quién quiere revisar sus cartas · <b>sin castigo</b></p>
     <div class="pick">${players.map((p,i)=>`<button onclick="peek(${i})">${avHTML(i)}<span>${esc(p.name)}</span></button>`).join('')}</div>
     <button class="btn ghost" onclick="closeOv()">CANCELAR</button>`);
 }
 function peek(i){
-  G.peeks[i]++;G.sips[i]+=settings.peek;vibe(30);sfx('flip');
-  let left=5;
-  $('#sheet').innerHTML=`<div class="grab" style="background:#ddd"></div><h2 class="lil">${esc(players[i].name)}</h2><p>${settings.peek?`+${settings.peek} 🍺 por espiar · `:''}se ocultan en <b id="pk">${left}</b>s</p>
+  G.peeks[i]++;vibe(30);sfx('flip');
+  let left=8;
+  $('#sheet').innerHTML=`<div class="grab" style="background:#ddd"></div><h2 class="lil">${esc(players[i].name)}</h2><p>Que nadie más mire 👀 · se ocultan en <b id="pk">${left}</b>s</p>
     <div class="hand">${G.hands[i].map(c=>cardHTML(c,'big up')).join('')}</div><button class="btn" onclick="closeOv()">OCULTAR</button>`;
   clearInterval(peekT);peekT=setInterval(()=>{left--;const e=$('#pk');if(e)e.textContent=left;if(left<=0)closeOv()},1000);
 }
