@@ -243,6 +243,26 @@ input{font:inherit;user-select:text;-webkit-user-select:text}
 .er .mh .card{--w:26px}
 .er .n{font-family:'Lilita';font-size:22px;min-width:52px;text-align:right}
 #confetti{position:fixed;inset:0;pointer-events:none;z-index:40}
+/* ---------- paywall / premium ---------- */
+.wall-top{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:10px 24px;gap:6px}
+.hourglass{font-size:72px;animation:flipg 3s ease-in-out infinite}
+@keyframes flipg{0%,40%{transform:rotate(0)}50%,90%{transform:rotate(180deg)}100%{transform:rotate(360deg)}}
+.wall-top h2{margin:6px 0 0;font-size:32px}
+.wall-top p{margin:0;opacity:.9}
+.timer{font-family:'Lilita';font-size:64px;line-height:1;color:#FFC400;text-shadow:0 5px 0 rgba(0,0,0,.25);letter-spacing:2px;margin-top:4px}
+.wall-actions{display:flex;flex-direction:column;gap:12px;padding:6px 20px 22px}
+.btn.gold{background:#FFC400;color:#3d1290}
+.prem{border-radius:26px;padding:18px;background:linear-gradient(150deg,#ffd54a,#FFB300 45%,#ff8a00);color:#3d1290;box-shadow:0 7px 0 rgba(0,0,0,.25);position:relative;overflow:hidden}
+.prem::after{content:"";position:absolute;top:-40%;left:-60%;width:40%;height:180%;background:rgba(255,255,255,.35);transform:rotate(20deg);animation:sweep 3.5s ease-in-out infinite;pointer-events:none}
+@keyframes sweep{0%,60%{left:-60%}100%{left:130%}}
+.prem h3{margin:0;font-family:'Lilita';font-weight:400;font-size:26px;letter-spacing:.5px}
+.prem ul{margin:8px 0 12px;padding:0;list-style:none;font-weight:900;font-size:15.5px;line-height:1.6}
+.prem .price{font-family:'Lilita';font-size:30px}
+.prem .price small{font-family:'Nunito';font-weight:900;font-size:14px;opacity:.8}
+.prem .btn{background:#3d1290;color:#fff;margin-top:10px;position:relative;z-index:1}
+.linkbtn{background:none;color:#fff;opacity:.85;font-weight:900;font-size:15px;text-decoration:underline;padding:6px}
+.badge{display:inline-flex;align-items:center;gap:6px;background:#FFC400;color:#3d1290;font-family:'Lilita';letter-spacing:.5px;padding:6px 14px;border-radius:99px;box-shadow:0 4px 0 rgba(0,0,0,.2)}
+.freeinfo{text-align:center;font-size:13.5px;opacity:.85;margin-top:-4px}
 .toast{position:fixed;left:50%;bottom:calc(110px + env(safe-area-inset-bottom));transform:translate(-50%,30px);background:#fff;color:#1b0b3a;font-weight:900;padding:12px 20px;border-radius:999px;box-shadow:0 8px 24px rgba(0,0,0,.3);opacity:0;transition:.3s;z-index:70;white-space:nowrap}
 .toast.on{opacity:1;transform:translate(-50%,0)}
 </style>
@@ -281,12 +301,32 @@ input{font:inherit;user-select:text;-webkit-user-select:text}
   </div>
   <div class="home-actions">
     <button class="btn" onclick="go('players')">🍻 JUGAR</button>
+    <div class="freeinfo" id="freeInfo"></div>
+    <button class="btn gold" id="homePrem" onclick="openPremium()">👑 PREMIUM</button>
     <div class="home-row">
       <button class="btn ghost" onclick="go('howto')">📖 REGLAS</button>
       <button class="btn ghost" onclick="go('settings')">⚙️ AJUSTES</button>
     </div>
   </div>
   <div class="legal">Bebe con responsabilidad · Solo +18</div>
+</section>
+
+<!-- PAYWALL -->
+<section class="screen bg-purple pattern" id="wall">
+  <div class="topbar"><button class="icon-btn" onclick="go('home')">←</button><h2></h2><span class="spacer"></span></div>
+  <div class="wall-top">
+    <div class="hourglass">⏳</div>
+    <h2 class="lil ts">¡TÓMENSE UN RESPIRO!</h2>
+    <p id="wallMsg">Su próxima partida gratis estará lista en</p>
+    <div class="timer" id="wallT">30:00</div>
+  </div>
+  <div class="wall-actions" id="wallActions"></div>
+</section>
+
+<!-- PREMIUM -->
+<section class="screen bg-purple pattern" id="premium">
+  <div class="topbar"><button class="icon-btn" onclick="go('home')">←</button><h2 class="lil ts">PREMIUM</h2><span class="spacer"></span></div>
+  <div class="scroll"><div class="wall-actions" id="premBody" style="padding-top:16px"></div></div>
 </section>
 
 <!-- HOW TO -->
@@ -427,7 +467,7 @@ function go(id){
   cur=id;
   if(id==='players')renderPlayers();
   if(id==='settings')renderSettings();
-  if(id==='home')renderHomeLogo();
+  if(id==='home'){renderHomeLogo();renderHomeGate()}
 }
 
 /* ---------- bubbles ---------- */
@@ -483,6 +523,10 @@ function renderSettings(){
     tg('vibe','📳 Vibración','Vibra cuando te toca tomar')+
     tg('memo','🧠 Ver cartas al inicio','Cada jugador mira sus 4 cartas en secreto')+
     seg('memoSecs','⏱️ Tiempo para memorizar','Segundos por jugador',[5,10,15],o=>o+'s')+
+    (NB?`<div class="set"><div class="t"><b>👑 Premium</b><small>${isPremium()?'Suscripción activa':'Juega sin esperas ni videos'}</small></div><button class="btn small" style="width:auto;color:var(--green)" onclick="${isPremium()?"nb('manage')":'openPremium()'}">${isPremium()?'GESTIONAR':'VER'}</button></div>
+      <div class="set"><div class="t"><b>🔄 Restaurar compra</b><small>Si ya pagaste en otro teléfono</small></div><button class="btn small" style="width:auto;color:var(--green)" onclick="restorePremium()">RESTAURAR</button></div>`:'')+
+    (NB&&nb('privacyRequired',false)?`<div class="set"><div class="t"><b>🔒 Privacidad de anuncios</b><small>Cambia tus opciones de consentimiento</small></div><button class="btn small" style="width:auto;color:var(--green)" onclick="nb('privacy')">ABRIR</button></div>`:'')+
+    `<div class="set"><div class="t"><b>📄 Política de privacidad</b><small>Cómo usamos tus datos</small></div><a class="btn small" style="width:auto;color:var(--green);text-decoration:none" href="https://jonhblackrc1.github.io/piramide/privacidad.html" target="_blank" rel="noopener">VER</a></div>`+
     `<div class="set"><div class="t"><b>🍻 Bebe con responsabilidad</b><small>Conoce tu límite. Nunca conduzcas si has bebido. Puedes jugar con bebidas sin alcohol.</small></div></div>`;
 }
 function toggleSet(k){settings[k]=!settings[k];store.set('settings',settings);renderSettings();sfx('tap')}
@@ -503,9 +547,99 @@ function renderPlayers(){
   $('#phint').textContent=players.length>6?`${players.length} jugadores · se usarán 2 barajas`:players.length?`${players.length} jugador${players.length>1?'es':''} · 1 baraja`:'';
 }
 
+/* ---------- free games / ads / premium ---------- */
+const FREE_WAIT=30*60*1000;
+const PLAY_URL='https://play.google.com/store/apps/details?id=com.blackstudio.piramide';
+const NB=window.PiramideAndroid||null;
+function nb(m,d){try{return NB&&NB[m]?NB[m]():d}catch(e){return d}}
+let gate=Object.assign({next:0,pending:'',credits:0},store.get('gate',{}));
+if(gate.pending){gate.pending='';gate.next=Date.now()+FREE_WAIT;store.set('gate',gate)}
+function saveGate(){store.set('gate',gate)}
+function isPremium(){return !!nb('isPremium',false)}
+function waitLeft(){return Math.max(0,gate.next-Date.now())}
+function canPlay(){return isPremium()||gate.credits>0||waitLeft()===0}
+function consumePlay(){
+  if(isPremium()){gate.pending='';return}
+  if(waitLeft()>0){gate.credits--;gate.pending='credit'}else gate.pending='free';
+  saveGate();
+}
+function gameOver(refund){
+  if(!gate.pending)return;
+  if(refund){if(gate.pending==='credit')gate.credits++}
+  else gate.next=Date.now()+FREE_WAIT;
+  gate.pending='';saveGate();
+}
+function priceText(){return nb('price','')||'$990'}
+function fmtLeft(ms){const t=Math.ceil(ms/1000);return String(Math.floor(t/60)).padStart(2,'0')+':'+String(t%60).padStart(2,'0')}
+let wallT=null;
+function showPaywall(){
+  renderWall();cur='';go('wall');
+  clearInterval(wallT);wallT=setInterval(()=>{if(cur!=='wall'){clearInterval(wallT);return}renderWallTimer()},1000);
+}
+function renderWallTimer(){
+  const l=waitLeft();$('#wallT').textContent=fmtLeft(l);
+  if(l===0||isPremium()){clearInterval(wallT);renderWall()}
+}
+function premCard(){
+  return `<div class="prem"><h3>👑 PIRÁMIDE PREMIUM</h3><ul><li>🍻 Partidas ilimitadas</li><li>⏳ Sin esperas de 30 minutos</li><li>🚫 Sin videos de publicidad</li></ul>
+    <div class="price">${esc(priceText())} <small>/ mes</small></div><div style="font-size:13px;font-weight:700;opacity:.8">Cancela cuando quieras desde Google Play</div>
+    <button class="btn" onclick="buyPremium()">SUSCRIBIRME</button></div>`;
+}
+function renderWall(){
+  const l=waitLeft(),free=l===0||isPremium();
+  $('#wallT').textContent=free?'¡LISTO!':fmtLeft(l);
+  $('#wallMsg').textContent=free?'Ya pueden jugar otra partida':'Su próxima partida gratis estará lista en';
+  let h='';
+  if(free)h=`<button class="btn" style="color:var(--purple)" onclick="startGame()">🍻 ¡JUGAR AHORA!</button>`;
+  else if(NB){
+    const ready=nb('adReady',false);
+    h=`<button class="btn" style="color:var(--purple)" id="adBtn" onclick="watchAd()" ${ready?'':'disabled'}>${ready?'▶️ VER VIDEO Y JUGAR':'⏳ CARGANDO VIDEO…'}</button>`+premCard()+
+      `<button class="linkbtn" onclick="restorePremium()">Ya pagué · Restaurar compra</button>`;
+  }else{
+    h=`<a class="btn" style="color:var(--purple);text-decoration:none" href="${PLAY_URL}" target="_blank" rel="noopener">📲 BAJAR LA APP</a>
+      <div class="freeinfo" style="margin:4px 0 0">En la app puedes ver un video para jugar al instante o hacerte Premium por ${esc(priceText())} al mes.</div>`;
+  }
+  $('#wallActions').innerHTML=h;
+}
+function renderHomeGate(){
+  const p=isPremium();
+  $('#homePrem').style.display=NB&&!p?'':'none';
+  const l=waitLeft();
+  $('#freeInfo').innerHTML=p?'<span class="badge">👑 PREMIUM · SIN LÍMITES</span>':gate.credits>0?`🎟️ Tienes ${gate.credits} partida${gate.credits>1?'s':''} desbloqueada${gate.credits>1?'s':''}`:l>0?`⏳ Próxima partida gratis en ${fmtLeft(l)}`:'✅ Tienes 1 partida gratis disponible';
+}
+setInterval(()=>{if(cur==='home')renderHomeGate()},1000);
+function openPremium(){renderPremium();go('premium')}
+function renderPremium(){
+  const p=isPremium();
+  $('#premBody').innerHTML=p
+    ?`<div class="prem" style="text-align:center"><h3>👑 ¡ERES PREMIUM!</h3><ul><li>Partidas ilimitadas, sin esperas ni videos</li></ul><button class="btn" onclick="nb('manage')">GESTIONAR SUSCRIPCIÓN</button></div>`
+    :premCard()+`<button class="linkbtn" onclick="restorePremium()">Ya pagué · Restaurar compra</button>
+      <div class="freeinfo">Sin Premium tienes 1 partida gratis cada 30 minutos, o puedes ver un video para jugar al instante.</div>`;
+}
+function watchAd(){if(!NB)return;sfx('tap');const b=$('#adBtn');if(b){b.disabled=true;b.textContent='⏳ ABRIENDO VIDEO…'}NB.showAd()}
+function buyPremium(){if(!NB){location.href=PLAY_URL;return}sfx('tap');NB.subscribe()}
+function restorePremium(){if(!NB)return;toast('Buscando tu suscripción…');NB.restore()}
+/* callbacks from Android */
+window.onAdReady=function(){if(cur==='wall')renderWall()};
+window.onAdResult=function(r){
+  if(r==='ok'){gate.credits++;saveGate();toast('¡Partida desbloqueada! 🎉');sfx('drink');setTimeout(startGame,400)}
+  else{if(r==='skip')toast('Mira el video completo para desbloquear');else toast('No hay videos disponibles, intenta en un momento');if(cur==='wall')renderWall()}
+};
+window.onPrice=function(){if(cur==='wall')renderWall();if(cur==='premium')renderPremium()};
+window.onPremium=function(){if(cur==='wall')renderWall();if(cur==='premium')renderPremium();if(cur==='home')renderHomeGate();if(cur==='settings')renderSettings()};
+window.onBuyResult=function(r){
+  if(r==='ok'){confetti(220);sfx('win');toast('¡Bienvenido a Premium! 👑');if(cur==='wall')startGame();else if(cur==='premium')renderPremium()}
+  else if(r==='pending')toast('Pago pendiente: se activará cuando se confirme');
+  else if(r==='unavailable')toast('La suscripción no está disponible ahora');
+  else if(r==='error')toast('No se pudo completar el pago');
+};
+window.onRestore=function(ok){toast(ok?'¡Suscripción restaurada! 👑':'No encontramos una suscripción activa');window.onPremium()};
+
 /* ---------- game ---------- */
 function startGame(){
   if(players.length<2){go('players');return}
+  if(!canPlay()){showPaywall();return}
+  consumePlay();
   const decks=players.length*4+28>52?2:1;let deck=[];
   for(let d=0;d<decks;d++)for(const s of SUITS)for(const r of RANKS)deck.push({r,s});
   shuffle(deck);
@@ -553,7 +687,7 @@ function showBoard(){
   $('#pyr').onclick=e=>{const c=e.target.closest('.card');if(c&&+c.dataset.i===G.idx)flipNext()};
   cur='';go('board');sizePyr();
   for(let k=0;k<6;k++)setTimeout(()=>sfx('deal'),k*160);
-  G.busy=true;setTimeout(()=>{G.busy=false},28*40+300);
+  G.busy=true;setTimeout(()=>{if(G)G.busy=false},28*40+300);
   updateBoard();
 }
 function updateBoard(){
@@ -623,7 +757,7 @@ function askQuit(){
   openOv(`<div class="grab" style="background:#ddd"></div><h2 class="lil">¿SALIR DEL JUEGO?</h2><p>Se perderá la partida actual.</p>
     <div class="btns"><button class="btn ghost" style="flex:1" onclick="closeOv()">SEGUIR</button><button class="btn" style="flex:1" onclick="quitGame()">SALIR</button></div>`);
 }
-function quitGame(){closeOv();clearInterval(memoTimer);G=null;go('home')}
+function quitGame(){closeOv();clearInterval(memoTimer);gameOver(G&&G.idx===0);G=null;go('home')}
 
 /* ---------- end ---------- */
 function showEnd(){
@@ -634,7 +768,7 @@ function showEnd(){
   $('#podium').innerHTML=pod;
   $('#endList').innerHTML=order.map((i,k)=>`<div class="er"><b style="width:22px;text-align:center">${k+1}</b>${avHTML(i)}<div class="nm">${esc(players[i].name)}</div><div class="mh">${G.hands[i].map(c=>cardHTML(c,'up nb')).join('')}</div><div class="n">🍺${G.sips[i]}<br><small style="font-size:14px">🎁${G.given[i]}</small></div></div>`).join('')
     +`<div class="hint" style="padding-top:6px">${G.sips[order[0]]>0?`🏆 ${esc(players[order[0]].name)} es el más tomador de la noche`:''}${Math.max(...G.given)>0?`<br>🎁 ${esc(players[G.given.indexOf(Math.max(...G.given))].name)} fue el más generoso (${Math.max(...G.given)} regalados)`:''}</div>`;
-  cur='';go('end');sfx('win');vibe([100,80,100,80,300]);confetti(260);
+  gameOver(false);cur='';go('end');sfx('win');vibe([100,80,100,80,300]);confetti(260);
 }
 
 /* ---------- confetti ---------- */
@@ -659,12 +793,13 @@ window.onAndroidBack=function(){
   if(cur==='home'||cur==='age')return false;
   if(cur==='board'||cur==='pass'||cur==='memo'||cur==='memo-out'){askQuit();return true}
   if(cur==='end'){go('home');return true}
+  if(cur==='wall'||cur==='premium'){go('home');return true}
   go('home');return true;
 };
 
 /* ---------- init ---------- */
 $('#sipsLegend').innerHTML=ROWC.map((c,i)=>`<i style="background:${c}">Fila ${i+1}: ${isGive(i+1)?'regala':'toma'} ${i+1} ${isGive(i+1)?'🎁':'🍺'}</i>`).join('');
-renderHomeLogo();
+renderHomeLogo();renderHomeGate();
 (document.fonts&&document.fonts.ready?Promise.race([document.fonts.ready,new Promise(r=>setTimeout(r,800))]):Promise.resolve()).then(()=>setTimeout(runSplash,150));
 </script>
 </body>

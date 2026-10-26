@@ -1,0 +1,7 @@
+.gradle/
+build/
+local.properties
+*.jks
+*.keystore
+# copiado desde ../app al compilar
+app/src/main/assets/www/
