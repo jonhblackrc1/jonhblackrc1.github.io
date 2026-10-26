@@ -62,6 +62,13 @@ h2{font-size:clamp(34px,5vw,52px);text-align:center;margin:0 0 10px}
 .final{text-align:center;background:radial-gradient(80% 100% at 50% 0%,#ff6b91,#FF3D6E 50%,#b3123f);border-radius:34px;padding:50px 20px;box-shadow:0 10px 0 rgba(0,0,0,.25)}
 .final .cta{color:var(--pink)}
 footer{text-align:center;padding:30px 16px 50px;font-size:14px;opacity:.7;line-height:1.6}
+.dlwarn{background:#FFC400;color:#2a0d6e;border-radius:18px;padding:14px 16px;margin:0 0 16px;font-weight:900;line-height:1.4;box-shadow:0 5px 0 rgba(0,0,0,.25);max-width:520px;text-align:left}
+.help{margin-top:14px;max-width:520px;text-align:left;font-size:15px;line-height:1.45}
+.help summary{cursor:pointer;font-weight:900;opacity:.9;text-decoration:underline}
+.help ul{margin:10px 0 0;padding-left:20px;opacity:.92}
+.help li{margin:6px 0}
+.help code{background:rgba(255,255,255,.14);padding:2px 6px;border-radius:6px;word-break:break-all}
+@media (max-width:860px){.dlwarn,.help{margin-left:auto;margin-right:auto}}
 @media (max-width:860px){
   .hero .wrap{grid-template-columns:1fr;text-align:center;padding-top:24px}
   .lead{margin-left:auto;margin-right:auto}
@@ -87,12 +94,23 @@ footer{text-align:center;padding:30px 16px 50px;font-size:14px;opacity:.7;line-h
       <h1 class="lil">PIRÁMIDE</h1>
       <div class="tag">EL JUEGO PARA BEBER</div>
       <p class="lead">El clásico de las fiestas, ahora en tu celular. Cada jugador recibe 4 cartas, se arma una pirámide de 7 filas y se voltean una a una. ¿Tienes esa carta? En las filas impares <b>¡tomas!</b> y en las pares <b>¡regalas!</b> Cada fila vale más tragos hasta llegar a la cima.</p>
-      <a class="cta" href="piramide.apk" download>
+      <div class="dlwarn" id="dlwarn" hidden></div>
+      <a class="cta" href="piramide.apk" type="application/vnd.android.package-archive">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 9.48l1.84-3.18a.38.38 0 0 0-.66-.38l-1.86 3.22a11.4 11.4 0 0 0-9.84 0L5.22 5.92a.38.38 0 0 0-.66.38L6.4 9.48A10.8 10.8 0 0 0 1 18h22a10.8 10.8 0 0 0-5.4-8.52zM7 15.25a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5zm10 0a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5z"/></svg>
         <span>DESCARGAR APK<small>Android 5.0 o superior · v1.2 · 0.5 MB</small></span>
       </a>
       <a class="secondary" href="app/">o juega desde el navegador →</a>
       <div class="meta">Gratis · Sin anuncios · Funciona sin internet</div>
+      <details class="help">
+        <summary>¿No se descarga?</summary>
+        <ul>
+          <li>Si abriste esta página desde <b>WhatsApp, Instagram o Facebook</b>, toca <b>⋮</b> (arriba a la derecha) y elige <b>“Abrir en Chrome”</b>. Esos navegadores no permiten descargar archivos.</li>
+          <li>Si Chrome dice que <i>“el archivo puede ser dañino”</i>, toca <b>“Descargar de todas formas”</b>.</li>
+          <li>Mantén presionado el botón y elige <b>“Descargar enlace”</b>.</li>
+          <li>O copia este enlace directo en Chrome: <code>jonhblackrc1.github.io/piramide/piramide.apk</code></li>
+          <li>En <b>iPhone</b> no se pueden instalar archivos APK: juega desde el navegador.</li>
+        </ul>
+      </details>
     </div>
     <div class="phone"><div class="screen"><iframe src="app/" title="Demo de Pirámide" loading="lazy"></iframe></div></div>
   </div>
@@ -144,7 +162,7 @@ footer{text-align:center;padding:30px 16px 50px;font-size:14px;opacity:.7;line-h
     <div class="final">
       <h2 class="lil" style="text-shadow:0 5px 0 rgba(0,0,0,.2)">¿QUIÉN LLEGA A LA CIMA?</h2>
       <p class="sub" style="margin-bottom:26px;opacity:.95">Descárgala gratis y arma la pirámide esta noche.</p>
-      <a class="cta" href="piramide.apk" download>DESCARGAR APK</a>
+      <a class="cta" href="piramide.apk" type="application/vnd.android.package-archive">DESCARGAR APK</a>
     </div>
   </div>
 </section>
@@ -153,5 +171,14 @@ footer{text-align:center;padding:30px 16px 50px;font-size:14px;opacity:.7;line-h
   Pirámide es un juego para mayores de 18 años. Bebe con responsabilidad, conoce tu límite y nunca conduzcas si has bebido.<br>
   También se puede jugar con bebidas sin alcohol. · © 2026 Black Studio · <a href="privacidad.html">Política de privacidad</a>
 </footer>
+<script>
+(function(){
+  var ua=navigator.userAgent||'',w=document.getElementById('dlwarn'),msg='';
+  if(/iPhone|iPad|iPod/i.test(ua))msg='📱 Estás en un iPhone: las APK son solo para Android. Toca “o juega desde el navegador” para jugar aquí mismo.';
+  else if(/FBAN|FBAV|Instagram|WhatsApp|Line\/|TikTok|musical_ly|Snapchat|Twitter/i.test(ua)||(/Android/i.test(ua)&&/; wv\)/.test(ua)))
+    msg='⚠️ Abriste la página dentro de otra app y aquí no se pueden descargar archivos. Toca ⋮ (arriba a la derecha) y elige “Abrir en Chrome”.';
+  if(msg){w.textContent=msg;w.hidden=false}
+})();
+</script>
 </body>
 </html>
