@@ -129,6 +129,8 @@ input{font:inherit;user-select:text;-webkit-user-select:text}
 .empty{text-align:center;padding:40px 30px;opacity:.85}
 .empty .e{font-size:64px}
 .foot{padding:12px 20px 22px}
+.lvpick{display:flex;align-items:center;justify-content:center;gap:12px;padding:4px 20px 10px;font-family:'Lilita';letter-spacing:1px;font-size:17px}
+.lvpick .seg button.on{color:var(--pink)}
 
 /* ---------- info pages ---------- */
 .steps{display:flex;flex-direction:column;gap:14px;padding:6px 20px 24px}
@@ -333,13 +335,13 @@ input{font:inherit;user-select:text;-webkit-user-select:text}
 <section class="screen bg-blue pattern" id="howto">
   <div class="topbar"><button class="icon-btn" onclick="go('home')">←</button><h2 class="lil ts">CÓMO SE JUEGA</h2><span class="spacer"></span></div>
   <div class="scroll"><div class="steps">
-    <div class="step"><div class="n">1</div><div><b>ANOTA A LOS JUGADORES</b><span>De 2 a 12 personas. Con más de 6 se usan dos barajas.</span></div></div>
+    <div class="step"><div class="n">1</div><div><b>ANOTA A LOS JUGADORES</b><span>De 2 a 12 personas. La app usa las barajas que hagan falta.</span></div></div>
     <div class="step"><div class="n">2</div><div><b>CADA UNO RECIBE 4 CARTAS</b><span>Pásense el teléfono: cada jugador mira sus 4 cartas en secreto y trata de memorizarlas.</span></div></div>
-    <div class="step"><div class="n">3</div><div><b>SE ARMA LA PIRÁMIDE</b><span>28 cartas boca abajo en 7 filas: 7 abajo y 1 en la punta.</span></div></div>
-    <div class="step"><div class="n">4</div><div><b>SE VOLTEAN UNA A UNA</b><span>Quien tenga una carta del mismo número o figura recibe tantos tragos como el número de la fila. En las filas <i>impares (1, 3, 5 y 7) se los toma</i>; en las <i>pares (2, 4 y 6) los regala</i> a quien quiera. ¡Si tiene dos iguales, el doble!</span>
+    <div class="step"><div class="n">3</div><div><b>SE ARMA LA PIRÁMIDE</b><span id="ruleBuild"></span></div></div>
+    <div class="step"><div class="n">4</div><div><b>SE VOLTEAN UNA A UNA</b><span>Quien tenga una carta del mismo número o figura recibe tantos tragos como el número de la fila. En las filas <i>impares (1, 3, 5…) se los toma</i>; en las <i>pares (2, 4, 6…) los regala</i> a quien quiera. ¡Si tiene dos iguales, el doble!</span>
       <div class="sips" id="sipsLegend"></div></div></div>
     <div class="step"><div class="n">5</div><div><b>¿SE TE OLVIDARON?</b><span>Toca 👀 para revisar tus cartas cuando quieras, sin castigo.</span></div></div>
-    <div class="step"><div class="n">6</div><div><b>LA CIMA</b><span>La última carta vale 7 tragos ¡para tomar! Al final se corona al más tomador de la noche. 🏆</span></div></div>
+    <div class="step"><div class="n">6</div><div><b>LA CIMA</b><span id="ruleTop"></span></div></div>
   </div></div>
 </section>
 
@@ -357,6 +359,7 @@ input{font:inherit;user-select:text;-webkit-user-select:text}
     <button class="icon-btn" type="submit">+</button>
   </form>
   <div class="scroll"><div class="plist" id="plist"></div></div>
+  <div class="lvpick"><span>PIRÁMIDE</span><div class="seg" id="lvSeg"></div></div>
   <div class="hint" id="phint"></div>
   <div class="foot"><button class="btn" id="startBtn" style="color:var(--pink)" onclick="startGame()">¡A JUGAR!</button></div>
 </section>
@@ -425,7 +428,13 @@ const SUITS=['♠','♥','♦','♣'],RANKS=['A','2','3','4','5','6','7','8','9'
 const COLORS=['#FF3D6E','#00A8E8','#FFB300','#00C27F','#9B4DFF','#FF7A2F','#FF4FC3','#3D6BFF','#14C8B8','#E53935','#7CC242','#C2185B'];
 const ROWC=['#00C27F','#00A8E8','#3D6BFF','#8A4DFF','#FF3D9A','#FF7A2F','#FFB300'];
 const ROWSTART=[0,7,13,18,22,25,27];
-let settings=Object.assign({sound:true,vibe:true,memo:true,memoSecs:10},store.get('settings',{}));
+const ROWC11=['#00C27F','#14C8B8','#00A8E8','#3D6BFF','#6A4DFF','#9B4DFF','#D04DFF','#FF3D9A','#FF4D5E','#FF7A2F','#FFB300'];
+const LEVELS=[7,11];
+function LV(){return G?G.lv:settings.levels}
+function total(lv){return lv*(lv+1)/2}
+function rowStart(r,lv){let s=0;for(let j=1;j<r;j++)s+=lv+1-j;return s}
+function rowColor(r,lv){lv=lv||LV();return lv===7?ROWC[r-1]:ROWC11[r-1]}
+let settings=Object.assign({sound:true,vibe:true,memo:true,memoSecs:10,levels:11},store.get('settings',{}));
 let players=store.get('players',[]);
 let G=null,cur='splash';
 
@@ -457,7 +466,7 @@ function faceHTML(c){const red=c.s==='♥'||c.s==='♦';return `<div class="face
 function cardHTML(c,cls,style){return `<div class="card ${cls||''}" style="${style||''}"><div class="inner"><div class="back"></div>${c?faceHTML(c):'<div class="face"></div>'}</div></div>`}
 function avHTML(i,cls){const p=players[i];return `<div class="av ${cls||''}" style="background:${p.color}">${esc(p.name.charAt(0).toUpperCase())}</div>`}
 let toastT;function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('on'),2200)}
-function rowOf(i){let r=0;while(r<6&&i>=ROWSTART[r+1])r++;return r+1}
+function rowOf(i){const lv=LV();let r=1;while(r<lv&&i>=rowStart(r+1,lv))r++;return r}
 function trago(n){return n===1?'1 TRAGO':n+' TRAGOS'}
 function isGive(r){return r%2===0}
 
@@ -523,6 +532,7 @@ function renderSettings(){
     tg('vibe','📳 Vibración','Vibra cuando te toca tomar')+
     tg('memo','🧠 Ver cartas al inicio','Cada jugador mira sus 4 cartas en secreto')+
     seg('memoSecs','⏱️ Tiempo para memorizar','Segundos por jugador',[5,10,15],o=>o+'s')+
+    seg('levels','🔺 Tamaño de la pirámide','Niveles (filas) de la pirámide',LEVELS,o=>o)+
     (NB?`<div class="set"><div class="t"><b>👑 Premium</b><small>${isPremium()?'Suscripción activa':'Juega sin esperas ni videos'}</small></div><button class="btn small" style="width:auto;color:var(--green)" onclick="${isPremium()?"nb('manage')":'openPremium()'}">${isPremium()?'GESTIONAR':'VER'}</button></div>
       <div class="set"><div class="t"><b>🔄 Restaurar compra</b><small>Si ya pagaste en otro teléfono</small></div><button class="btn small" style="width:auto;color:var(--green)" onclick="restorePremium()">RESTAURAR</button></div>`:'')+
     (NB&&nb('privacyRequired',false)?`<div class="set"><div class="t"><b>🔒 Privacidad de anuncios</b><small>Cambia tus opciones de consentimiento</small></div><button class="btn small" style="width:auto;color:var(--green)" onclick="nb('privacy')">ABRIR</button></div>`:'')+
@@ -530,7 +540,7 @@ function renderSettings(){
     `<div class="set"><div class="t"><b>🍻 Bebe con responsabilidad</b><small>Conoce tu límite. Nunca conduzcas si has bebido. Puedes jugar con bebidas sin alcohol.</small></div></div>`;
 }
 function toggleSet(k){settings[k]=!settings[k];store.set('settings',settings);renderSettings();sfx('tap')}
-function segSet(k,v){settings[k]=v;store.set('settings',settings);renderSettings();sfx('tap')}
+function segSet(k,v){settings[k]=v;store.set('settings',settings);renderSettings();sfx('tap');if(k==='levels'){renderLv();renderRules()}}
 
 /* ---------- players ---------- */
 function nextColor(){const used=players.map(p=>p.color);return COLORS.find(c=>!used.includes(c))||COLORS[players.length%COLORS.length]}
@@ -544,22 +554,25 @@ function renderPlayers(){
   $('#plist').innerHTML=players.length?players.map((p,i)=>`<div class="prow">${avHTML(i)}<div class="nm">${esc(p.name)}</div><button onclick="delPlayer(${i})">✕</button></div>`).join('')
     :`<div class="empty"><div class="e">🍻</div><div>Agrega al menos 2 jugadores para empezar</div></div>`;
   $('#startBtn').disabled=players.length<2;
-  $('#phint').textContent=players.length>6?`${players.length} jugadores · se usarán 2 barajas`:players.length?`${players.length} jugador${players.length>1?'es':''} · 1 baraja`:'';
+  const nd=Math.ceil((players.length*4+total(settings.levels))/52);
+  $('#phint').textContent=players.length?`${players.length} jugador${players.length>1?'es':''} · ${total(settings.levels)} cartas en la pirámide · ${nd} baraja${nd>1?'s':''}`:'';
 }
 
 /* ---------- free games / ads / premium ---------- */
 const FREE_WAIT=30*60*1000;
 const PLAY_URL='https://play.google.com/store/apps/details?id=com.blackstudio.piramide';
 const NB=window.PiramideAndroid||null;
+// APK que se descarga desde la página (sin anuncios ni pagos): sin límite de partidas
+const FREE_BUILD=!NB&&location.protocol==='file:';
 function nb(m,d){try{return NB&&NB[m]?NB[m]():d}catch(e){return d}}
 let gate=Object.assign({next:0,pending:'',credits:0},store.get('gate',{}));
 if(gate.pending){gate.pending='';gate.next=Date.now()+FREE_WAIT;store.set('gate',gate)}
 function saveGate(){store.set('gate',gate)}
 function isPremium(){return !!nb('isPremium',false)}
 function waitLeft(){return Math.max(0,gate.next-Date.now())}
-function canPlay(){return isPremium()||gate.credits>0||waitLeft()===0}
+function canPlay(){return FREE_BUILD||isPremium()||gate.credits>0||waitLeft()===0}
 function consumePlay(){
-  if(isPremium()){gate.pending='';return}
+  if(FREE_BUILD||isPremium()){gate.pending='';return}
   if(waitLeft()>0){gate.credits--;gate.pending='credit'}else gate.pending='free';
   saveGate();
 }
@@ -602,6 +615,7 @@ function renderWall(){
   $('#wallActions').innerHTML=h;
 }
 function renderHomeGate(){
+  if(FREE_BUILD){$('#homePrem').style.display='none';$('#freeInfo').textContent='';return}
   const p=isPremium();
   $('#homePrem').style.display=NB&&!p?'':'none';
   const l=waitLeft();
@@ -640,10 +654,10 @@ function startGame(){
   if(players.length<2){go('players');return}
   if(!canPlay()){showPaywall();return}
   consumePlay();
-  const decks=players.length*4+28>52?2:1;let deck=[];
+  const lv=settings.levels,tot=total(lv),decks=Math.ceil((players.length*4+tot)/52);let deck=[];
   for(let d=0;d<decks;d++)for(const s of SUITS)for(const r of RANKS)deck.push({r,s});
   shuffle(deck);
-  G={hands:players.map(()=>deck.splice(0,4)),pyr:deck.splice(0,28),idx:0,sips:players.map(()=>0),given:players.map(()=>0),hits:players.map(()=>0),peeks:players.map(()=>0),memo:0,busy:false};
+  G={hands:players.map(()=>deck.splice(0,4)),pyr:deck.splice(0,tot),lv,tot,idx:0,sips:players.map(()=>0),given:players.map(()=>0),hits:players.map(()=>0),peeks:players.map(()=>0),memo:0,busy:false};
   if(settings.memo)showPass();else showBoard();
 }
 function showPass(){
@@ -675,43 +689,44 @@ function memoDone(){
 
 function sizePyr(){
   const wrap=$('#pyrWrap');if(!wrap)return;
-  const W=Math.min(innerWidth,560)-28,H=wrap.clientHeight-16,gap=Math.max(4,Math.min(8,W*0.015));
-  const w=Math.min((W-6*gap)/7,(H-6*gap)/(7*1.4),78);
+  const lv=LV(),W=Math.min(innerWidth,560)-(lv>7?16:28),H=wrap.clientHeight-16,gap=lv>7?Math.max(3,Math.min(6,W*0.01)):Math.max(4,Math.min(8,W*0.015));
+  const w=Math.min((W-(lv-1)*gap)/lv,(H-(lv-1)*gap)/(lv*1.4),78);
   $('#pyr').style.setProperty('--cw',Math.floor(w)+'px');$('#pyr').style.setProperty('--gap',gap+'px');
 }
 addEventListener('resize',sizePyr);
 function showBoard(){
   let h='';
-  for(let r=7;r>=1;r--){h+='<div class="row">';for(let k=0;k<8-r;k++){const i=ROWSTART[r-1]+k;h+=cardHTML(G.pyr[i],'deal'+(i<G.idx?' up done':''),`animation-delay:${(i*0.04).toFixed(2)}s`).replace('class="back"',`class="back" style="--c:${ROWC[r-1]}"`).replace('<div class="card',`<div data-i="${i}" class="card`)}h+='</div>'}
+  const lv=G.lv,dl=Math.min(0.04,1.2/G.tot);
+  for(let r=lv;r>=1;r--){h+='<div class="row">';for(let k=0;k<lv+1-r;k++){const i=rowStart(r,lv)+k;h+=cardHTML(G.pyr[i],'deal'+(i<G.idx?' up done':''),`animation-delay:${(i*dl).toFixed(2)}s`).replace('class="back"',`class="back" style="--c:${rowColor(r)}"`).replace('<div class="card',`<div data-i="${i}" class="card`)}h+='</div>'}
   $('#pyr').innerHTML=h;
   $('#pyr').onclick=e=>{const c=e.target.closest('.card');if(c&&+c.dataset.i===G.idx)flipNext()};
   cur='';go('board');sizePyr();
   for(let k=0;k<6;k++)setTimeout(()=>sfx('deal'),k*160);
-  G.busy=true;setTimeout(()=>{if(G)G.busy=false},28*40+300);
+  G.busy=true;setTimeout(()=>{if(G)G.busy=false},G.tot*dl*1000+500);
   updateBoard();
 }
 function updateBoard(){
-  const done=G.idx>=28,r=done?7:rowOf(G.idx);
+  const lv=G.lv,done=G.idx>=G.tot,r=done?lv:rowOf(G.idx);
   document.querySelectorAll('#pyr .card').forEach(c=>c.classList.toggle('next',+c.dataset.i===G.idx));
-  $('#rowChip').style.background=ROWC[r-1];
-  $('#rowChip').innerHTML=r===7?`👑 CIMA · 🍺 TOMA 7`:isGive(r)?`FILA ${r} · 🎁 REGALA ${r}`:`FILA ${r} · 🍺 TOMA ${r}`;
-  $('#prog').style.width=(G.idx/28*100)+'%';
+  $('#rowChip').style.background=rowColor(r);
+  $('#rowChip').innerHTML=r===lv?`👑 CIMA · ${isGive(r)?'🎁 REGALA':'🍺 TOMA'} ${r}`:isGive(r)?`FILA ${r} · 🎁 REGALA ${r}`:`FILA ${r} · 🍺 TOMA ${r}`;
+  $('#prog').style.width=(G.idx/G.tot*100)+'%';
   $('#flipBtn').textContent=done?'VER RESULTADOS':'VOLTEAR CARTA';
-  $('#flipBtn').style.color=ROWC[r-1];
+  $('#flipBtn').style.color=rowColor(r);
 }
 function flipNext(){
   if(!G||G.busy||ovOpen)return;
-  if(G.idx>=28){showEnd();return}
+  if(G.idx>=G.tot){showEnd();return}
   G.busy=true;
   const i=G.idx,c=G.pyr[i],r=rowOf(i),el=$(`#pyr .card[data-i="${i}"]`);
   el.classList.remove('next','deal');el.classList.add('up','done');sfx('flip');vibe(15);
   const res=[];
   G.hands.forEach((h,p)=>{const n=h.filter(x=>x.r===c.r).length;if(n){const s=n*r;if(isGive(r))G.given[p]+=s;else G.sips[p]+=s;G.hits[p]+=n;res.push({p,n,s})}});
   G.idx++;
-  setTimeout(()=>{if(res.length)el.classList.add('hit');showReveal(c,r,res,i===27);G.busy=false},650);
+  setTimeout(()=>{if(res.length)el.classList.add('hit');showReveal(c,r,res,i===G.tot-1);G.busy=false},650);
 }
 function showReveal(c,r,res,top){
-  const col=ROWC[r-1],give=isGive(r),ic=give?'🎁':'🍺';
+  const col=rowColor(r),give=isGive(r),ic=give?'🎁':'🍺';
   let body;
   if(res.length){
     body=`<div class="drinkers">${res.sort((a,b)=>b.s-a.s).map((x,k)=>`<div class="dk" style="animation-delay:${.25+k*.12}s">${avHTML(x.p)}<div class="nm">${esc(players[x.p].name)}<small>${x.n>1?`¡Tiene ${x.n} cartas ${c.r}!`:`Tiene un ${c.r}`}${give?' · regala':' · toma'}</small></div><div class="n">${ic} ${x.s}</div></div>`).join('')}</div>`;
@@ -720,7 +735,7 @@ function showReveal(c,r,res,top){
   }else{body=`<div class="nobody"><span class="e">😅</span>¡Nadie tiene un ${c.r}!<br>${give?'Esta vez nadie regala':'Esta vez se salvan todos'}</div>`;sfx('none')}
   const title=res.length?(give?(top?'¡REGALA LA CIMA!':res.length>=3?'¡REGALO MASIVO!':'¡A REGALAR!'):(top?'¡A FONDO!':res.length>=3?'¡RONDA MASIVA!':'¡A TOMAR!')):(give?'¡NADIE REGALA!':'¡SE SALVARON!');
   openOv(`<div class="grab"></div>
-    <div class="sub">${top?'👑 LA CIMA DE LA PIRÁMIDE':'FILA '+r+' DE 7'} · ${give?'🎁 FILA DE REGALAR':'🍺 FILA DE TOMAR'}</div>
+    <div class="sub">${top?'👑 LA CIMA DE LA PIRÁMIDE':'FILA '+r+' DE '+G.lv} · ${give?'🎁 FILA DE REGALAR':'🍺 FILA DE TOMAR'}</div>
     <div class="rv-top">${cardHTML(c,'big up nb')}<div class="mult">x${r}<small>${r===1?'TRAGO':'TRAGOS'}<br>${give?'PARA REGALAR':'PARA TOMAR'}</small></div></div>
     <h2 class="lil ts">${title}</h2>
     ${give&&res.length?'<div class="sub" style="opacity:.9;font-size:15px">Repártelos a quien tú quieras 😈</div>':''}
@@ -798,7 +813,15 @@ window.onAndroidBack=function(){
 };
 
 /* ---------- init ---------- */
-$('#sipsLegend').innerHTML=ROWC.map((c,i)=>`<i style="background:${c}">Fila ${i+1}: ${isGive(i+1)?'regala':'toma'} ${i+1} ${isGive(i+1)?'🎁':'🍺'}</i>`).join('');
+function renderRules(){
+  const lv=settings.levels;
+  $('#ruleBuild').textContent=`${total(lv)} cartas boca abajo en ${lv} filas: ${lv} abajo y 1 en la punta. Puedes elegir pirámide de 7 u 11 niveles.`;
+  $('#ruleTop').textContent=`La última carta vale ${lv} tragos ¡para ${isGive(lv)?'regalar':'tomar'}! Al final se corona al más tomador de la noche. 🏆`;
+  $('#sipsLegend').innerHTML=Array.from({length:lv},(_,i)=>`<i style="background:${rowColor(i+1,lv)}">Fila ${i+1}: ${isGive(i+1)?'regala':'toma'} ${i+1} ${isGive(i+1)?'🎁':'🍺'}</i>`).join('');
+}
+function renderLv(){$('#lvSeg').innerHTML=LEVELS.map(o=>`<button class="${settings.levels===o?'on':''}" onclick="setLevels(${o})">${o} NIVELES</button>`).join('')}
+function setLevels(v){settings.levels=v;store.set('settings',settings);sfx('tap');renderLv();renderRules();renderPlayers();if(cur==='settings')renderSettings()}
+renderRules();renderLv();
 renderHomeLogo();renderHomeGate();
 (document.fonts&&document.fonts.ready?Promise.race([document.fonts.ready,new Promise(r=>setTimeout(r,800))]):Promise.resolve()).then(()=>setTimeout(runSplash,150));
 </script>
