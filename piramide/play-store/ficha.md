@@ -2,13 +2,13 @@
 
 **Nombre de la app (máx. 30):** Pirámide: Juego para Beber
 
-**Descripción breve (máx. 80):** Clásico juego de cartas para la previa: pirámide de 7 u 11 filas y 1 cima 🍻
+**Descripción breve (máx. 80):** Juego de cartas para la previa: modo Clásico (7 pisos) y Hardcore (11) 🔥
 
 **Descripción completa:**
 
 ¡El clásico de las fiestas ahora en tu celular! 🍻
 
-Pirámide es el juego de cartas para beber con amigos. Cada jugador recibe 4 cartas en secreto y se arma una pirámide boca abajo de 7 filas (28 cartas) u 11 filas (66 cartas). Se voltean una a una: si tienes una carta del mismo número o figura…
+Pirámide es el juego de cartas para beber con amigos. Cada jugador recibe 4 cartas en secreto y se arma la pirámide boca abajo en uno de sus dos modos: 🍻 CLÁSICO (7 pisos, 28 cartas) o 🔥 HARDCORE (11 pisos, 66 cartas). Se voltean una a una: si tienes una carta del mismo número o figura…
 
 🍺 En las filas impares (1, 3, 5 y 7) ¡TOMAS!
 🎁 En las filas pares (2, 4 y 6) ¡REGALAS los tragos a quien quieras!
