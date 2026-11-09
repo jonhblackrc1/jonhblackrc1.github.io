@@ -144,6 +144,38 @@ input{font:inherit;user-select:text;-webkit-user-select:text}
 #board.hc .progress i{background:linear-gradient(90deg,#FFB300,#FF7A2F,#FF3D3D,#d6142c)}
 .hcbadge{display:none;text-align:center;font-family:'Lilita';letter-spacing:3px;font-size:14px;color:#FFB300;text-shadow:0 0 12px rgba(255,90,40,.8);padding-top:4px}
 #board.hc .hcbadge{display:block;animation:flick 2.4s ease-in-out infinite}
+#board.hc::after{content:"";position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 90px 10px rgba(255,30,30,.45);animation:vign 2.2s ease-in-out infinite}
+@keyframes vign{50%{box-shadow:inset 0 0 130px 30px rgba(255,40,20,.65)}}
+.embers{position:absolute;inset:0;pointer-events:none;overflow:hidden;display:none}
+#board.hc .embers{display:block}
+.embers span{position:absolute;bottom:-12px;width:6px;height:6px;border-radius:50%;background:radial-gradient(circle,#ffd54a 0%,#ff6a00 55%,transparent 70%);animation:emberup linear infinite}
+@keyframes emberup{0%{transform:translate(0,0) scale(1);opacity:0}10%{opacity:1}100%{transform:translate(30px,-100vh) scale(.3);opacity:0}}
+#board.shake{animation:shake2 .5s}
+@keyframes shake2{10%,50%,90%{transform:translate(-7px,2px) rotate(-.6deg)}30%,70%{transform:translate(7px,-2px) rotate(.6deg)}}
+.redflash{position:fixed;inset:0;background:radial-gradient(circle,rgba(255,60,20,.0),rgba(255,0,0,.55));opacity:0;pointer-events:none;z-index:60}
+.redflash.on{animation:flash .6s ease-out}
+#players.hc{background:radial-gradient(120% 80% at 50% 0%,#ff5a3c 0%,#c4122a 45%,#4a0410 100%)}
+#players.hc .add .icon-btn,#players.hc #startBtn{color:#c4122a}
+.hcwarn{margin:0 20px 8px;padding:10px 14px;border-radius:16px;background:rgba(0,0,0,.28);font-weight:900;font-size:14px;text-align:center;line-height:1.35}
+#memo.hc{background:radial-gradient(130% 70% at 50% 0%,#7a0e1c 0%,#3a0610 50%,#160206 100%)}
+.hand.six{grid-template-columns:repeat(3,auto);gap:10px}
+.hand.six .card{--w:min(26vw,100px)}
+.modal .hand.six .card{--w:min(22vw,84px)}
+.er .mh.six .card{--w:20px}
+.er .mh.six{gap:2px}
+/* intro hardcore */
+#hcIntro{position:fixed;inset:0;z-index:80;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:14px;padding:24px;
+  background:radial-gradient(90% 70% at 50% 50%,#8a0a1c 0%,#2a0208 60%,#000 100%);color:#fff}
+#hcIntro.on{display:flex;animation:hcin .25s ease-out}
+@keyframes hcin{from{opacity:0}}
+#hcIntro .skull{font-size:84px;animation:hcpulse .5s ease-in-out infinite alternate;filter:drop-shadow(0 0 24px rgba(255,60,20,.9))}
+@keyframes hcpulse{to{transform:scale(1.12) rotate(-4deg)}}
+#hcIntro h1{margin:0;font-family:'Lilita';font-weight:400;font-size:min(17vw,76px);letter-spacing:3px;color:#fff;line-height:1;
+  text-shadow:0 0 18px #ff2a00,0 0 40px #ff2a00,0 6px 0 #7a0618;animation:glitch .35s steps(2) infinite}
+@keyframes glitch{0%{transform:translate(0)}25%{transform:translate(-3px,1px) skewX(-4deg)}50%{transform:translate(3px,-1px)}75%{transform:translate(-1px,2px) skewX(3deg)}}
+#hcIntro p{margin:0;font-family:'Lilita';letter-spacing:2px;font-size:19px;color:#FFB300}
+#hcIntro .rules{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+#hcIntro .rules span{background:rgba(255,255,255,.12);border:2px solid rgba(255,120,60,.6);padding:8px 12px;border-radius:14px;font-weight:900;font-size:15px}
 @keyframes flick{0%,100%{opacity:1}45%{opacity:.75}50%{opacity:1}55%{opacity:.8}}
 #end.hc{background:radial-gradient(120% 80% at 50% 0%,#ff5a3c 0%,#c4122a 45%,#4a0410 100%)}
 .lvpick{display:flex;align-items:center;justify-content:center;gap:12px;padding:4px 20px 10px;font-family:'Lilita';letter-spacing:1px;font-size:17px}
@@ -297,6 +329,9 @@ input{font:inherit;user-select:text;-webkit-user-select:text}
   <div class="tap lil">TOCA PARA EMPEZAR</div>
 </section>
 <div class="flash" id="flash"></div>
+<div class="redflash" id="redflash"></div>
+<div id="hcIntro"><div class="skull">💀</div><h1>HARDCORE</h1><p>SIN PIEDAD</p>
+  <div class="rules"><span>🃏 6 cartas por cabeza</span><span>🂠 1 solo mazo</span><span>🍺 más coincidencias, más tragos</span></div></div>
 
 <!-- AGE -->
 <section class="screen bg-pink pattern" id="age">
@@ -321,8 +356,8 @@ input{font:inherit;user-select:text;-webkit-user-select:text}
   </div>
   <div class="home-actions">
     <div class="modes">
-      <button class="mode" onclick="pickMode(7)"><span class="ic">🍻</span><b>CLÁSICO</b><small>7 pisos · 28 cartas</small></button>
-      <button class="mode hc" onclick="pickMode(11)"><span class="ic">🔥</span><b>HARDCORE</b><small>11 pisos · 66 cartas</small></button>
+      <button class="mode" onclick="pickMode('classic')"><span class="ic">🍻</span><b>CLÁSICO</b><small>4 cartas por jugador</small></button>
+      <button class="mode hc" onclick="pickMode('hc')"><span class="ic">🔥</span><b>HARDCORE</b><small>6 cartas · 1 mazo · 💀</small></button>
     </div>
     <div class="freeinfo" id="freeInfo"></div>
     <button class="btn gold" id="homePrem" onclick="openPremium()">👑 PREMIUM</button>
@@ -356,8 +391,8 @@ input{font:inherit;user-select:text;-webkit-user-select:text}
 <section class="screen bg-blue pattern" id="howto">
   <div class="topbar"><button class="icon-btn" onclick="go('home')">←</button><h2 class="lil ts">CÓMO SE JUEGA</h2><span class="spacer"></span></div>
   <div class="scroll"><div class="steps">
-    <div class="step"><div class="n">1</div><div><b>ANOTA A LOS JUGADORES</b><span>De 2 a 12 personas. La app usa las barajas que hagan falta.</span></div></div>
-    <div class="step"><div class="n">2</div><div><b>CADA UNO RECIBE 4 CARTAS</b><span>Pásense el teléfono: cada jugador mira sus 4 cartas en secreto y trata de memorizarlas.</span></div></div>
+    <div class="step"><div class="n">1</div><div><b>ANOTA A LOS JUGADORES</b><span>Clásico: de 2 a 12 personas (la app usa las barajas que hagan falta). 🔥 Hardcore: de 2 a 4 personas con un solo mazo.</span></div></div>
+    <div class="step"><div class="n">2</div><div><b>CADA UNO RECIBE SUS CARTAS</b><span>4 cartas en Clásico y <i>6 en Hardcore</i>. Pásense el teléfono: cada jugador mira sus cartas en secreto y trata de memorizarlas.</span></div></div>
     <div class="step"><div class="n">3</div><div><b>SE ARMA LA PIRÁMIDE</b><span id="ruleBuild"></span></div></div>
     <div class="step"><div class="n">4</div><div><b>SE VOLTEAN UNA A UNA</b><span>Quien tenga una carta del mismo número o figura recibe tantos tragos como el número de la fila. En las filas <i>impares (1, 3, 5…) se los toma</i>; en las <i>pares (2, 4, 6…) los regala</i> a quien quiera. ¡Si tiene dos iguales, el doble!</span>
       <div class="sips" id="sipsLegend"></div></div></div>
@@ -380,6 +415,7 @@ input{font:inherit;user-select:text;-webkit-user-select:text}
     <button class="icon-btn" type="submit">+</button>
   </form>
   <div class="scroll"><div class="plist" id="plist"></div></div>
+  <div class="hcwarn" id="hcWarn" hidden></div>
   <div class="lvpick"><span>MODO</span><div class="seg" id="lvSeg"></div></div>
   <div class="hint" id="phint"></div>
   <div class="foot"><button class="btn" id="startBtn" style="color:var(--pink)" onclick="startGame()">¡A JUGAR!</button></div>
@@ -401,7 +437,7 @@ input{font:inherit;user-select:text;-webkit-user-select:text}
 <section class="screen bg-night" id="memo">
   <div class="center">
     <h2 class="memo-h lil ts" id="memoName"></h2>
-    <div style="opacity:.85">¡Memoriza tus cartas!</div>
+    <div style="opacity:.85" id="memoSub">¡Memoriza tus cartas!</div>
     <div class="hand" id="memoHand"></div>
     <div class="ring"><svg viewBox="0 0 74 74"><circle cx="37" cy="37" r="32" stroke="rgba(255,255,255,.15)"/><circle id="ringC" cx="37" cy="37" r="32" stroke="#FFC400" stroke-linecap="round" stroke-dasharray="201" stroke-dashoffset="0"/></svg><span id="ringT"></span></div>
   </div>
@@ -415,7 +451,8 @@ input{font:inherit;user-select:text;-webkit-user-select:text}
     <div class="chip" id="rowChip"></div>
     <button class="icon-btn" onclick="openScore()">🏆</button>
   </div>
-  <div class="hcbadge">🔥 MODO HARDCORE · 11 PISOS 🔥</div>
+  <div class="hcbadge">💀 MODO HARDCORE · 6 CARTAS · 1 MAZO 💀</div>
+  <div class="embers" id="embers"></div>
   <div class="progress"><i id="prog"></i></div>
   <div class="pyr-wrap" id="pyrWrap"><div class="pyr" id="pyr"></div></div>
   <div class="bfoot">
@@ -450,13 +487,14 @@ const SUITS=['♠','♥','♦','♣'],RANKS=['A','2','3','4','5','6','7','8','9'
 const COLORS=['#FF3D6E','#00A8E8','#FFB300','#00C27F','#9B4DFF','#FF7A2F','#FF4FC3','#3D6BFF','#14C8B8','#E53935','#7CC242','#C2185B'];
 const ROWC=['#00C27F','#00A8E8','#3D6BFF','#8A4DFF','#FF3D9A','#FF7A2F','#FFB300'];
 const ROWSTART=[0,7,13,18,22,25,27];
-const ROWC11=['#00C27F','#14C8B8','#00A8E8','#3D6BFF','#6A4DFF','#9B4DFF','#D04DFF','#FF3D9A','#FF4D5E','#FF7A2F','#FFB300'];
-const LEVELS=[7,11];
-function LV(){return G?G.lv:settings.levels}
+const LEVELS=7,HC_CARDS=6,HC_MAX=4;
+function LV(){return LEVELS}
 function total(lv){return lv*(lv+1)/2}
 function rowStart(r,lv){let s=0;for(let j=1;j<r;j++)s+=lv+1-j;return s}
-function rowColor(r,lv){lv=lv||LV();return lv===7?ROWC[r-1]:ROWC11[r-1]}
-let settings=Object.assign({sound:true,vibe:true,memo:true,memoSecs:10,levels:11},store.get('settings',{}));
+function rowColor(r){return ROWC[r-1]}
+let settings=Object.assign({sound:true,vibe:true,memo:true,memoSecs:10,mode:'classic'},store.get('settings',{}));
+if(settings.mode!=='hc')settings.mode='classic';delete settings.levels;
+function isHC(){return G?G.hc:settings.mode==='hc'}
 let players=store.get('players',[]);
 let G=null,cur='splash';
 
@@ -554,7 +592,7 @@ function renderSettings(){
     tg('vibe','📳 Vibración','Vibra cuando te toca tomar')+
     tg('memo','🧠 Ver cartas al inicio','Cada jugador mira sus 4 cartas en secreto')+
     seg('memoSecs','⏱️ Tiempo para memorizar','Segundos por jugador',[5,10,15],o=>o+'s')+
-    seg('levels','🔺 Modo de juego','Clásico: 7 pisos · Hardcore: 11 pisos',LEVELS,o=>o===11?'🔥 11':'7')+
+    `<div class="set"><div class="t"><b>🔺 Modo de juego</b><small>Clásico: 4 cartas · Hardcore: 6 cartas y 1 mazo</small></div><div class="seg">${['classic','hc'].map(o=>`<button class="${settings.mode===o?'on':''}" onclick="setMode('${o}')">${o==='hc'?'🔥':'🍻'}</button>`).join('')}</div></div>`+
     (NB?`<div class="set"><div class="t"><b>👑 Premium</b><small>${isPremium()?'Suscripción activa':'Juega sin esperas ni videos'}</small></div><button class="btn small" style="width:auto;color:var(--green)" onclick="${isPremium()?"nb('manage')":'openPremium()'}">${isPremium()?'GESTIONAR':'VER'}</button></div>
       <div class="set"><div class="t"><b>🔄 Restaurar compra</b><small>Si ya pagaste en otro teléfono</small></div><button class="btn small" style="width:auto;color:var(--green)" onclick="restorePremium()">RESTAURAR</button></div>`:'')+
     (NB&&nb('privacyRequired',false)?`<div class="set"><div class="t"><b>🔒 Privacidad de anuncios</b><small>Cambia tus opciones de consentimiento</small></div><button class="btn small" style="width:auto;color:var(--green)" onclick="nb('privacy')">ABRIR</button></div>`:'')+
@@ -562,7 +600,7 @@ function renderSettings(){
     `<div class="set"><div class="t"><b>🍻 Bebe con responsabilidad</b><small>Conoce tu límite. Nunca conduzcas si has bebido. Puedes jugar con bebidas sin alcohol.</small></div></div>`;
 }
 function toggleSet(k){settings[k]=!settings[k];store.set('settings',settings);renderSettings();sfx('tap')}
-function segSet(k,v){settings[k]=v;store.set('settings',settings);renderSettings();sfx('tap');if(k==='levels'){renderLv();renderRules()}}
+function segSet(k,v){settings[k]=v;store.set('settings',settings);renderSettings();sfx('tap')}
 
 /* ---------- players ---------- */
 function nextColor(){const used=players.map(p=>p.color);return COLORS.find(c=>!used.includes(c))||COLORS[players.length%COLORS.length]}
@@ -575,9 +613,13 @@ function delPlayer(i){players.splice(i,1);store.set('players',players);sfx('tap'
 function renderPlayers(){
   $('#plist').innerHTML=players.length?players.map((p,i)=>`<div class="prow">${avHTML(i)}<div class="nm">${esc(p.name)}</div><button onclick="delPlayer(${i})">✕</button></div>`).join('')
     :`<div class="empty"><div class="e">🍻</div><div>Agrega al menos 2 jugadores para empezar</div></div>`;
-  $('#startBtn').disabled=players.length<2;
-  const nd=Math.ceil((players.length*4+total(settings.levels))/52);
-  $('#phint').textContent=players.length?`${players.length} jugador${players.length>1?'es':''} · ${total(settings.levels)} cartas en la pirámide · ${nd} baraja${nd>1?'s':''}`:'';
+  const hc=settings.mode==='hc',over=hc&&players.length>HC_MAX;
+  $('#players').classList.toggle('hc',hc);
+  $('#startBtn').disabled=players.length<2||over;
+  const w=$('#hcWarn');w.hidden=!over;
+  if(over)w.textContent=`💀 Hardcore es de 2 a ${HC_MAX} jugadores: con un solo mazo no alcanzan las cartas (28 de la pirámide + 6 por jugador). Quita ${players.length-HC_MAX} jugador${players.length-HC_MAX>1?'es':''} o juega en Clásico.`;
+  const nd=hc?1:Math.ceil((players.length*4+total(LEVELS))/52);
+  $('#phint').textContent=players.length?`${players.length} jugador${players.length>1?'es':''} · ${hc?'6':'4'} cartas c/u · ${nd} mazo${nd>1?'s':''}`:'';
 }
 
 /* ---------- free games / ads / premium ---------- */
@@ -674,14 +716,23 @@ window.onRestore=function(ok){toast(ok?'¡Suscripción restaurada! 👑':'No enc
 /* ---------- game ---------- */
 function startGame(){
   if(players.length<2){go('players');return}
+  const hc=settings.mode==='hc';
+  if(hc&&players.length>HC_MAX){toast(`Hardcore: máximo ${HC_MAX} jugadores`);go('players');return}
   if(!canPlay()){showPaywall();return}
   consumePlay();
-  const lv=settings.levels,tot=total(lv),decks=Math.ceil((players.length*4+tot)/52);let deck=[];
+  const lv=LEVELS,tot=total(lv),cpp=hc?HC_CARDS:4,decks=hc?1:Math.ceil((players.length*cpp+tot)/52);let deck=[];
   for(let d=0;d<decks;d++)for(const s of SUITS)for(const r of RANKS)deck.push({r,s});
   shuffle(deck);
-  G={hands:players.map(()=>deck.splice(0,4)),pyr:deck.splice(0,tot),lv,tot,idx:0,sips:players.map(()=>0),given:players.map(()=>0),hits:players.map(()=>0),peeks:players.map(()=>0),memo:0,busy:false};
-  if(settings.memo)showPass();else showBoard();
+  G={hands:players.map(()=>deck.splice(0,cpp)),pyr:deck.splice(0,tot),lv,tot,hc,idx:0,sips:players.map(()=>0),given:players.map(()=>0),hits:players.map(()=>0),peeks:players.map(()=>0),memo:0,busy:false};
+  const go2=()=>{if(settings.memo)showPass();else showBoard()};
+  if(hc)hcIntro(go2);else go2();
 }
+function hcIntro(next){
+  const el=$('#hcIntro');el.classList.add('on');sfx('boom');setTimeout(()=>sfx('whoosh'),300);vibe([120,60,120,60,300]);
+  let done=false;const fin=()=>{if(done)return;done=true;el.classList.remove('on');el.onclick=null;next()};
+  el.onclick=fin;setTimeout(fin,2600);
+}
+(function(){let h='';for(let i=0;i<22;i++){const s=3+Math.random()*6;h+=`<span style="left:${Math.random()*100}%;width:${s}px;height:${s}px;animation-duration:${3+Math.random()*4}s;animation-delay:${-Math.random()*6}s"></span>`}$('#embers').innerHTML=h})();
 function showPass(){
   const i=G.memo,p=players[i];
   const s=$('#pass');s.style.background=`radial-gradient(120% 80% at 50% 0%,rgba(255,255,255,.3),rgba(255,255,255,0) 45%,rgba(0,0,0,.35)),${p.color}`;
@@ -694,6 +745,8 @@ let memoTimer;
 function showMemo(){
   const i=G.memo;$('#memoName').textContent=players[i].name;
   $('#memoHand').innerHTML=G.hands[i].map(c=>cardHTML(c,'big')).join('');
+  $('#memoHand').classList.toggle('six',G.hc);$('#memo').classList.toggle('hc',G.hc);
+  $('#memoSub').textContent=G.hc?'🔥 HARDCORE · ¡Memoriza tus 6 cartas!':'¡Memoriza tus cartas!';
   go('memo');
   const cards=[...$('#memoHand').children];
   cards.forEach((c,k)=>setTimeout(()=>{c.classList.add('up');sfx('flip')},300+k*180));
@@ -717,7 +770,7 @@ function sizePyr(){
 }
 addEventListener('resize',sizePyr);
 function showBoard(){
-  let h='';$('#board').classList.toggle('hc',G.lv===11);
+  let h='';$('#board').classList.toggle('hc',G.hc);
   const lv=G.lv,dl=Math.min(0.04,1.2/G.tot);
   for(let r=lv;r>=1;r--){h+='<div class="row">';for(let k=0;k<lv+1-r;k++){const i=rowStart(r,lv)+k;h+=cardHTML(G.pyr[i],'deal'+(i<G.idx?' up done':''),`animation-delay:${(i*dl).toFixed(2)}s`).replace('class="back"',`class="back" style="--c:${rowColor(r)}"`).replace('<div class="card',`<div data-i="${i}" class="card`)}h+='</div>'}
   $('#pyr').innerHTML=h;
@@ -745,7 +798,7 @@ function flipNext(){
   const res=[];
   G.hands.forEach((h,p)=>{const n=h.filter(x=>x.r===c.r).length;if(n){const s=n*r;if(isGive(r))G.given[p]+=s;else G.sips[p]+=s;G.hits[p]+=n;res.push({p,n,s})}});
   G.idx++;
-  setTimeout(()=>{if(res.length)el.classList.add('hit');showReveal(c,r,res,i===G.tot-1);G.busy=false},650);
+  setTimeout(()=>{if(res.length){el.classList.add('hit');if(G.hc){const b=$('#board');b.classList.remove('shake');void b.offsetWidth;b.classList.add('shake');const f=$('#redflash');f.classList.remove('on');void f.offsetWidth;f.classList.add('on');vibe([90,50,140])}}showReveal(c,r,res,i===G.tot-1);G.busy=false},650);
 }
 function showReveal(c,r,res,top){
   const col=rowColor(r),give=isGive(r),ic=give?'🎁':'🍺';
@@ -755,7 +808,8 @@ function showReveal(c,r,res,top){
     sfx(top?'top':'drink');vibe(top?[80,60,80,60,200]:[60,50,120]);
     if(top||res.length>=3)confetti(top?220:90);
   }else{body=`<div class="nobody"><span class="e">😅</span>¡Nadie tiene un ${c.r}!<br>${give?'Esta vez nadie regala':'Esta vez se salvan todos'}</div>`;sfx('none')}
-  const title=res.length?(give?(top?'¡REGALA LA CIMA!':res.length>=3?'¡REGALO MASIVO!':'¡A REGALAR!'):(top?(G.lv===11?'🔥 ¡A FONDO, HARDCORE!':'¡A FONDO!'):res.length>=3?'¡RONDA MASIVA!':'¡A TOMAR!')):(give?'¡NADIE REGALA!':'¡SE SALVARON!');
+  let title=res.length?(give?(top?'¡REGALA LA CIMA!':res.length>=3?'¡REGALO MASIVO!':'¡A REGALAR!'):(top?(G.hc?'💀 ¡A FONDO, HARDCORE!':'¡A FONDO!'):res.length>=3?'¡RONDA MASIVA!':'¡A TOMAR!')):(give?'¡NADIE REGALA!':'¡SE SALVARON!');
+  if(G.hc&&res.length&&!/HARDCORE/.test(title))title='🔥 '+title;
   openOv(`<div class="grab"></div>
     <div class="sub">${top?'👑 LA CIMA DE LA PIRÁMIDE':'FILA '+r+' DE '+G.lv} · ${give?'🎁 FILA DE REGALAR':'🍺 FILA DE TOMAR'}</div>
     <div class="rv-top">${cardHTML(c,'big up nb')}<div class="mult">x${r}<small>${r===1?'TRAGO':'TRAGOS'}<br>${give?'PARA REGALAR':'PARA TOMAR'}</small></div></div>
@@ -786,7 +840,7 @@ function peek(i){
   G.peeks[i]++;vibe(30);sfx('flip');
   let left=8;
   $('#sheet').innerHTML=`<div class="grab" style="background:#ddd"></div><h2 class="lil">${esc(players[i].name)}</h2><p>Que nadie más mire 👀 · se ocultan en <b id="pk">${left}</b>s</p>
-    <div class="hand">${G.hands[i].map(c=>cardHTML(c,'big up')).join('')}</div><button class="btn" onclick="closeOv()">OCULTAR</button>`;
+    <div class="hand${G.hc?' six':''}">${G.hands[i].map(c=>cardHTML(c,'big up')).join('')}</div><button class="btn" onclick="closeOv()">OCULTAR</button>`;
   clearInterval(peekT);peekT=setInterval(()=>{left--;const e=$('#pk');if(e)e.textContent=left;if(left<=0)closeOv()},1000);
 }
 function askQuit(){
@@ -803,9 +857,9 @@ function showEnd(){
   const pod=[order[1],order[0],order[2]].map((i,k)=>{if(i===undefined)return'<div class="pd"></div>';const place=[2,1,3][k],h=[70,100,50][k];
     return `<div class="pd">${place===1?'<div class="crown">👑</div>':''}${avHTML(i)}<div class="nm">${esc(players[i].name)}</div><div class="blk" style="height:${h+G.sips[i]/max*40}px;background:${players[i].color};animation-delay:${[.3,.6,0][k]}s"><b>${G.sips[i]}</b><small>TRAGOS</small></div></div>`}).join('');
   $('#podium').innerHTML=pod;
-  $('#endList').innerHTML=order.map((i,k)=>`<div class="er"><b style="width:22px;text-align:center">${k+1}</b>${avHTML(i)}<div class="nm">${esc(players[i].name)}</div><div class="mh">${G.hands[i].map(c=>cardHTML(c,'up nb')).join('')}</div><div class="n">🍺${G.sips[i]}<br><small style="font-size:14px">🎁${G.given[i]}</small></div></div>`).join('')
+  $('#endList').innerHTML=order.map((i,k)=>`<div class="er"><b style="width:22px;text-align:center">${k+1}</b>${avHTML(i)}<div class="nm">${esc(players[i].name)}</div><div class="mh${G.hc?' six':''}">${G.hands[i].map(c=>cardHTML(c,'up nb')).join('')}</div><div class="n">🍺${G.sips[i]}<br><small style="font-size:14px">🎁${G.given[i]}</small></div></div>`).join('')
     +`<div class="hint" style="padding-top:6px">${G.sips[order[0]]>0?`🏆 ${esc(players[order[0]].name)} es el más tomador de la noche`:''}${Math.max(...G.given)>0?`<br>🎁 ${esc(players[G.given.indexOf(Math.max(...G.given))].name)} fue el más generoso (${Math.max(...G.given)} regalados)`:''}</div>`;
-  $('#end').classList.toggle('hc',G.lv===11);$('#end h2').textContent=G.lv===11?'🔥 ¡SOBREVIVIERON AL HARDCORE!':'¡FIN DE LA PIRÁMIDE!';
+  $('#end').classList.toggle('hc',G.hc);$('#end h2').textContent=G.hc?'🔥 ¡SOBREVIVIERON AL HARDCORE!':'¡FIN DE LA PIRÁMIDE!';
   gameOver(false);cur='';go('end');sfx('win');vibe([100,80,100,80,300]);confetti(260);
 }
 
@@ -837,16 +891,15 @@ window.onAndroidBack=function(){
 
 /* ---------- init ---------- */
 function renderRules(){
-  const lv=settings.levels;
-  $('#ruleBuild').textContent=`${total(lv)} cartas boca abajo en ${lv} filas: ${lv} abajo y 1 en la punta. Hay dos modos: 🍻 Clásico (7 pisos, 28 cartas) y 🔥 Hardcore (11 pisos, 66 cartas).`;
+  const lv=LEVELS;
+  $('#ruleBuild').textContent=`${total(lv)} cartas boca abajo en ${lv} filas: ${lv} abajo y 1 en la punta. Es igual en los dos modos; en 🔥 Hardcore cada jugador tiene 6 cartas y se usa un solo mazo, así que hay muchas más coincidencias.`;
   $('#ruleTop').textContent=`La última carta vale ${lv} tragos ¡para ${isGive(lv)?'regalar':'tomar'}! Al final se corona al más tomador de la noche. 🏆`;
-  $('#sipsLegend').innerHTML=Array.from({length:lv},(_,i)=>`<i style="background:${rowColor(i+1,lv)}">Fila ${i+1}: ${isGive(i+1)?'regala':'toma'} ${i+1} ${isGive(i+1)?'🎁':'🍺'}</i>`).join('');
+  $('#sipsLegend').innerHTML=Array.from({length:lv},(_,i)=>`<i style="background:${rowColor(i+1)}">Fila ${i+1}: ${isGive(i+1)?'regala':'toma'} ${i+1} ${isGive(i+1)?'🎁':'🍺'}</i>`).join('');
 }
-function modeName(lv){return lv===11?'🔥 HARDCORE':'🍻 CLÁSICO'}
-function renderLv(){$('#lvSeg').innerHTML=LEVELS.map(o=>`<button class="${settings.levels===o?'on':''}" onclick="setLevels(${o})">${modeName(o)} ${o}</button>`).join('');
-  const st=$('#startBtn');if(st)st.textContent=settings.levels===11?'🔥 ¡A JUGAR HARDCORE!':'¡A JUGAR!'}
-function pickMode(lv){settings.levels=lv;store.set('settings',settings);renderLv();renderRules();go('players');if(lv===11)vibe([30,40,60])}
-function setLevels(v){settings.levels=v;store.set('settings',settings);sfx('tap');renderLv();renderRules();renderPlayers();if(cur==='settings')renderSettings()}
+function renderLv(){$('#lvSeg').innerHTML=['classic','hc'].map(o=>`<button class="${settings.mode===o?'on':''}" onclick="setMode('${o}')">${o==='hc'?'🔥 HARDCORE':'🍻 CLÁSICO'}</button>`).join('');
+  const st=$('#startBtn');if(st)st.textContent=settings.mode==='hc'?'💀 ¡A JUGAR HARDCORE!':'¡A JUGAR!'}
+function pickMode(m){settings.mode=m;store.set('settings',settings);renderLv();renderRules();go('players');if(m==='hc'){vibe([30,40,60]);sfx('boom')}}
+function setMode(m){settings.mode=m;store.set('settings',settings);sfx('tap');renderLv();renderRules();renderPlayers();if(cur==='settings')renderSettings()}
 renderRules();renderLv();
 renderHomeLogo();renderHomeGate();
 (document.fonts&&document.fonts.ready?Promise.race([document.fonts.ready,new Promise(r=>setTimeout(r,800))]):Promise.resolve()).then(()=>setTimeout(runSplash,150));
