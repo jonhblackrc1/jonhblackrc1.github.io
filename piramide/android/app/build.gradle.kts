@@ -21,8 +21,8 @@ android {
         applicationId = "com.blackstudio.piramide"
         minSdk = 24
         targetSdk = 36
-        versionCode = 8
-        versionName = "2.2.0"
+        versionCode = 10
+        versionName = "2.3.0"
         buildConfigField("String", "SUB_PRODUCT_ID", "\"${config("PIRAMIDE_SUB_ID", "piramide_premium")}\"")
     }
 
