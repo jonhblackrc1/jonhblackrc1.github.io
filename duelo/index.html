@@ -1,0 +1,64 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Duelo de Barras</title>
+<meta name="description" content="Duelo de Barras: juego para dos personas en un mismo celular Android.">
+<link rel="icon" href="icon-512.png">
+<style>
+:root{--bg:#07080f;--fg:#e8e6f5;--cy:#00e5ff;--pk:#ff2e88;--yl:#ffd23f}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:'Trebuchet MS',system-ui,sans-serif;line-height:1.5}
+main{max-width:640px;margin:0 auto;padding:32px 16px 48px}
+.logo{display:block;width:112px;height:112px;margin:0 auto 12px;border-radius:24px;box-shadow:0 0 40px #00e5ff44,0 0 60px #ff2e8833}
+h1{margin:0;text-align:center;font-size:44px;line-height:1.05;font-weight:900;letter-spacing:1px}
+h1 .a{color:var(--cy)}h1 .b{color:var(--pk)}
+.tag{text-align:center;opacity:.8;margin:8px 0 24px}
+.cta{display:flex;flex-direction:column;align-items:center;gap:2px;text-decoration:none;color:#07080f;background:linear-gradient(90deg,var(--cy),var(--pk));padding:16px;border-radius:999px;font-weight:900;font-size:22px;letter-spacing:1px}
+.cta small{font-weight:700;font-size:13px;opacity:.75;letter-spacing:0}
+h2{font-size:20px;margin:32px 0 8px;color:var(--yl)}
+ul,ol{padding-left:22px;margin:0}li{margin:6px 0}
+.bar{display:flex;height:16px;border-radius:8px;overflow:hidden;margin:12px 0 4px}
+.bar span{flex:14}.bar .e{background:var(--yl)}.bar .m{background:var(--pk)}.bar .c{background:#fff;flex:10}
+.lbl{display:flex;justify-content:space-between;font-size:13px;opacity:.75}
+code{background:#ffffff14;padding:2px 6px;border-radius:6px;word-break:break-all}
+.note{margin-top:12px;font-size:14px;opacity:.75}
+a{color:#caa3ff}
+</style></head><body><main>
+<img class="logo" src="icon-512.png" alt="">
+<h1><span class="a">DUELO</span><br><span class="b">DE BARRAS</span></h1>
+<p class="tag">Dos jugadores, un celular. Cada uno defiende su lado.</p>
+<a class="cta" href="duelo.apk" type="application/vnd.android.package-archive">DESCARGAR APK<small>Android 5.0 o superior · v1.0 · 0.1 MB</small></a>
+<p class="note" id="msg"></p>
+
+<h2>Cómo se juega</h2>
+<ul>
+<li>Pongan el celular en la mesa: uno juega con la <b style="color:var(--cy)">barra de arriba</b> y el otro con la <b style="color:var(--pk)">barra de abajo</b>.</li>
+<li>Antes de empezar eligen quién saca: <b>arriba</b>, <b>abajo</b> o <b>sorteo</b>, y a cuántos puntos (5, 7 u 11).</li>
+<li>Para sacar, mueve tu barra y suelta el dedo (si no, sale sola en 4 segundos).</li>
+<li>Si la pelota traspasa tu barra, es punto del rival y te toca sacar a ti.</li>
+</ul>
+
+<h2>El rebote depende de dónde pega</h2>
+<div class="bar"><span class="e"></span><span class="m"></span><span class="c"></span><span class="m"></span><span class="e"></span></div>
+<div class="lbl"><span>punta</span><span>centro</span><span>punta</span></div>
+<ul>
+<li><b>Centro:</b> la pelota sale recta.</li>
+<li><b>Hacia los lados:</b> sale cada vez más inclinada.</li>
+<li><b style="color:var(--yl)">Puntas amarillas (¡FILO!):</b> ángulo cerrado y un 10% más de velocidad.</li>
+<li>Si mueves la barra justo al pegar, le das <b>efecto</b> a la salida.</li>
+<li>Cada golpe acelera un poco la pelota: los peloteos largos se ponen intensos.</li>
+</ul>
+
+<h2>Cómo instalar</h2>
+<ol>
+<li>Toca <b>Descargar APK</b> desde tu celular Android.</li>
+<li>Abre <b>duelo.apk</b> desde las notificaciones o la carpeta Descargas.</li>
+<li>Si lo pide, permite <b>“Instalar apps desconocidas”</b> para tu navegador.</li>
+<li>Toca <b>Instalar</b> y abre Duelo de Barras desde tu pantalla de inicio.</li>
+</ol>
+<p class="note">Enlace directo: <code>jonhblackrc1.github.io/duelo/duelo.apk</code></p>
+<p class="note"><a href="/">← Volver a Black Studio</a></p>
+</main>
+<script>
+if(/iPhone|iPad|iPod/i.test(navigator.userAgent))document.getElementById('msg').textContent='📱 Estás en un iPhone: las APK son solo para Android.';
+</script>
+</body></html>
