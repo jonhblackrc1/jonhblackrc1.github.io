@@ -24,5 +24,6 @@ if [ ! -f "$KS" ]; then
 fi
 apksigner sign --ks "$KS" --ks-pass pass:${KS_PASS:-android} --ks-key-alias ${KS_ALIAS:-duelo} \
   --out ../duelo.apk "$OUT/aligned.apk"
+rm -f ../duelo.apk.idsig
 apksigner verify --print-certs ../duelo.apk | head -1
 echo "APK lista: $(cd .. && pwd)/duelo.apk"
